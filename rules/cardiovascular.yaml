@@ -1,0 +1,9 @@
+id: elevated_lp_a
+domain: cardiovascular
+inputs:
+  - lp_a
+rules:
+  - when: "lp_a > 30"
+    severity: high
+    action: doctor_discussion
+    message: "Lp(a) is genetically influenced; discuss long-term cardiovascular risk with your doctor."

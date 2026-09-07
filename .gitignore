@@ -1,0 +1,51 @@
+# Java / Gradle
+backend/.gradle/
+backend/build/
+backend/out/
+*.class
+*.jar
+*.war
+*.log
+hs_err_pid*
+
+# Spring Boot
+backend/application-local.yml
+backend/application-local.properties
+
+# Node / Expo
+mobile/node_modules/
+mobile/.expo/
+mobile/dist/
+mobile/web-build/
+mobile/.env
+mobile/.env.local
+*.tsbuildinfo
+
+# IDE
+.idea/
+*.iml
+.vscode/
+*.swp
+*.swo
+.DS_Store
+
+# Secrets
+.env
+.env.*
+!.env.example
+**/secrets/
+*.pem
+*.key
+
+# Data (keep structure, ignore actual health PDFs)
+data/golden_dataset/**/*.pdf
+data/golden_dataset/**/*.jpg
+data/golden_dataset/**/*.png
+!data/golden_dataset/**/.gitkeep
+
+# OS
+Thumbs.db
+
+# Test output
+tests/output/
+coverage/

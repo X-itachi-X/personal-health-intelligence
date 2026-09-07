@@ -1,0 +1,2 @@
+# Place PDF reports here for golden-dataset tests.
+# Actual PDFs are gitignored; only ground-truth JSON is committed.

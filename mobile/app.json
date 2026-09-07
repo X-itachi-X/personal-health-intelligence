@@ -1,0 +1,12 @@
+{
+  "expo": {
+    "name": "Personal Health Intelligence",
+    "slug": "personal-health-intelligence",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "scheme": "phi",
+    "userInterfaceStyle": "automatic",
+    "platforms": ["ios", "android"],
+    "plugins": ["expo-router", "expo-secure-store"]
+  }
+}

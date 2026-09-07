@@ -1,0 +1,41 @@
+spring:
+  application:
+    name: phi
+  datasource:
+    url: jdbc:postgresql://localhost:5432/phi
+    username: phi
+    password: phi
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+  flyway:
+    enabled: true
+  servlet:
+    multipart:
+      max-file-size: 25MB
+      max-request-size: 25MB
+
+server:
+  port: 8080
+
+phi:
+  storage:
+    reports-dir: ${user.home}/.phi/reports
+  claude:
+    api-key: ${CLAUDE_API_KEY:}
+    model: claude-sonnet-4-20250514
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+logging:
+  level:
+    com.phi: INFO

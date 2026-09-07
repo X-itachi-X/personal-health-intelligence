@@ -1,0 +1,26 @@
+{
+  "patient": "ankit",
+  "report_date": "2026-09-06",
+  "source": "raw-data-on-this-project.md",
+  "biomarkers": [
+    { "canonical": "vitamin_d", "value": 21.3, "unit": "ng/mL", "reference": "30-100 sufficient" },
+    { "canonical": "lp_a", "value": 76, "unit": "mg/dL", "reference": "0-30" },
+    { "canonical": "alt", "value": 57, "unit": "U/L", "reference": "<50" },
+    { "canonical": "hdl", "value": 48, "unit": "mg/dL", "reference": ">50" },
+    { "canonical": "ldl", "value": 97, "unit": "mg/dL" },
+    { "canonical": "hba1c", "value": 5.5, "unit": "%", "reference": "<5.7" },
+    { "canonical": "rbc", "value": 6.10, "unit": "million/mm3", "reference": "4.5-5.5" },
+    { "canonical": "mcv", "value": 81.6, "unit": "fL", "reference": "83-101" },
+    { "canonical": "hemoglobin", "value": 16.2, "unit": "g/dL", "reference": "13-17" },
+    { "canonical": "ferritin", "value": 162.7, "unit": "ng/mL" },
+    { "canonical": "folate", "value": 3.83, "unit": "ng/mL" },
+    { "canonical": "homocysteine", "value": 14.25, "unit": "µmol/L" }
+  ],
+  "expected_findings": [
+    "elevated_lp_a",
+    "alt_trend_worsening",
+    "vitamin_d_insufficient",
+    "microcytic_rbc_pattern",
+    "folate_low_homocysteine_upper_normal"
+  ]
+}
