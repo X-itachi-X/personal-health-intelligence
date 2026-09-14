@@ -1,0 +1,25 @@
+#!/sbin/openrc-run
+
+name="phi"
+description="Personal Health Intelligence API"
+
+command="/usr/bin/java"
+command_args="-jar /var/phi/phi.jar"
+command_background=true
+pidfile="/run/${RC_SVCNAME}.pid"
+output_log="/var/log/phi.log"
+error_log="/var/log/phi.log"
+
+depend() {
+    need net
+    after firewall
+}
+
+start_pre() {
+    export SPRING_PROFILES_ACTIVE=prod
+    export CLAUDE_API_KEY="${CLAUDE_API_KEY:-}"
+    export PHI_H2_PASSWORD="${PHI_H2_PASSWORD:-}"
+    export PHI_CORS_ORIGINS="${PHI_CORS_ORIGINS:-}"
+    checkpath -d -m 0755 -o dev:dev /var/phi/data /var/phi/reports /var/phi/backups
+    checkpath -f -m 0644 -o dev:dev /var/log/phi.log
+}

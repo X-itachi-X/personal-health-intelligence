@@ -1,0 +1,28 @@
+spring:
+  config:
+    activate:
+      on-profile: prod
+  datasource:
+    url: jdbc:h2:file:/var/phi/data/phi;MODE=PostgreSQL;DB_CLOSE_DELAY=-1
+    driver-class-name: org.h2.Driver
+    username: phi
+    password: ${PHI_H2_PASSWORD:}
+  h2:
+    console:
+      enabled: false
+  jpa:
+    hibernate:
+      ddl-auto: validate
+  flyway:
+    enabled: true
+
+phi:
+  storage:
+    reports-dir: /var/phi/reports
+  cors:
+    allowed-origins: ${PHI_CORS_ORIGINS:http://localhost:8081}
+
+logging:
+  level:
+    com.phi: INFO
+    org.springframework.web: WARN

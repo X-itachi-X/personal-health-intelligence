@@ -17,7 +17,12 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/actuator/health", "/api/v1/health").permitAll()
+                        .requestMatchers(
+                                "/actuator/health",
+                                "/api/v1/health",
+                                "/api/v1/reports/**"
+                        ).permitAll()
+                        .requestMatchers("/h2-console/**").permitAll()
                         .anyRequest().authenticated()
                 );
         return http.build();

@@ -1,10 +1,8 @@
 spring:
   application:
     name: phi
-  datasource:
-    url: jdbc:postgresql://localhost:5432/phi
-    username: phi
-    password: phi
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:dev}
   jpa:
     hibernate:
       ddl-auto: validate
@@ -28,7 +26,10 @@ phi:
     reports-dir: ${user.home}/.phi/reports
   claude:
     api-key: ${CLAUDE_API_KEY:}
-    model: claude-sonnet-4-20250514
+    workspace-id: ${CLAUDE_WORKSPACE_ID:}
+    model: ${CLAUDE_MODEL:claude-sonnet-4-6}
+  cors:
+    allowed-origins: http://localhost:8081,http://127.0.0.1:8081
 
 management:
   endpoints:

@@ -2,14 +2,18 @@
 set -euo pipefail
 
 APP_DIR=/opt/phi
-cd "$APP_DIR"
+JAR_DEST=/var/phi/phi.jar
 
+cd "$APP_DIR"
 git pull origin main
+
 cd backend
 ./gradlew bootJar -x test
 
-# openrc example — adjust for your edge-server init system
-# doas cp build/libs/backend-*.jar /var/phi/phi.jar
-# doas rc-service phi restart
+JAR=$(ls -1 build/libs/backend-*.jar | grep -v plain | head -1)
+doas cp "$JAR" "$JAR_DEST"
+doas chown dev:dev "$JAR_DEST"
 
-echo "Build complete. Restart phi service manually if needed."
+doas rc-service phi restart
+
+echo "Deployed $(basename "$JAR") and restarted phi service."

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   ActivityIndicator,
   Pressable,
@@ -8,12 +8,26 @@ import {
   View,
 } from "react-native";
 import * as DocumentPicker from "expo-document-picker";
-
-const API_BASE = process.env.EXPO_PUBLIC_API_URL ?? "http://192.168.1.71:8080";
+import {
+  API_BASE,
+  Biomarker,
+  fetchHealth,
+  pollReportUntilDone,
+  uploadReport,
+} from "../lib/api";
 
 export default function HomeScreen() {
   const [uploading, setUploading] = useState(false);
   const [status, setStatus] = useState<string | null>(null);
+  const [backendStatus, setBackendStatus] = useState<"loading" | "ok" | "error">("loading");
+  const [biomarkers, setBiomarkers] = useState<Biomarker[]>([]);
+
+  useEffect(() => {
+    console.log("[phi] app started, API:", API_BASE);
+    fetchHealth()
+      .then(() => setBackendStatus("ok"))
+      .catch(() => setBackendStatus("error"));
+  }, []);
 
   async function pickAndUpload() {
     const result = await DocumentPicker.getDocumentAsync({
@@ -25,14 +39,36 @@ export default function HomeScreen() {
       return;
     }
 
+    const asset = result.assets[0];
+
     setUploading(true);
     setStatus("Processing your report...");
+    setBiomarkers([]);
 
-    // Phase 3: wire to POST /api/v1/reports
-    await new Promise((r) => setTimeout(r, 800));
+    try {
+      const upload = await uploadReport({
+        uri: asset.uri,
+        name: asset.name,
+        mimeType: asset.mimeType,
+        file: asset.file,
+      });
 
-    setUploading(false);
-    setStatus("Your health has been updated (stub).");
+      const report = await pollReportUntilDone(upload.reportId, (update) => {
+        setStatus(`Extraction: ${update.extractionStatus}...`);
+      });
+
+      if (report.extractionStatus === "TEXT_ONLY") {
+        setStatus("Text extracted. Set CLAUDE_API_KEY for full biomarker parsing.");
+      } else {
+        setStatus(`Extracted ${report.biomarkerCount} biomarkers from your report.`);
+      }
+      setBiomarkers(report.biomarkers.slice(0, 8));
+    } catch (error) {
+      console.error("[phi] upload flow failed", error);
+      setStatus(error instanceof Error ? error.message : "Upload failed");
+    } finally {
+      setUploading(false);
+    }
   }
 
   return (
@@ -41,7 +77,21 @@ export default function HomeScreen() {
 
       <View style={styles.card}>
         <Text style={styles.section}>What is happening?</Text>
-        <Text style={styles.item}>✓ Connect backend to see live summary</Text>
+        {backendStatus === "loading" && <Text style={styles.item}>Checking backend...</Text>}
+        {backendStatus === "ok" && <Text style={styles.item}>✓ Backend connected</Text>}
+        {backendStatus === "error" && (
+          <Text style={styles.item}>⚠ Backend offline — start Spring Boot on port 8080</Text>
+        )}
+        {biomarkers.length > 0 && (
+          <>
+            <Text style={styles.item}>✓ Latest report parsed</Text>
+            {biomarkers.map((b) => (
+              <Text key={b.canonical} style={styles.biomarker}>
+                {b.canonical}: {b.value ?? b.textValue} {b.unit ?? ""}
+              </Text>
+            ))}
+          </>
+        )}
       </View>
 
       <View style={styles.card}>
@@ -74,6 +124,7 @@ const styles = StyleSheet.create({
   },
   section: { fontSize: 16, fontWeight: "600" },
   item: { fontSize: 15, color: "#333" },
+  biomarker: { fontSize: 13, color: "#555", fontFamily: "monospace" },
   button: {
     backgroundColor: "#111",
     padding: 16,
