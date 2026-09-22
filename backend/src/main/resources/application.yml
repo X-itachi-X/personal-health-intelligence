@@ -24,10 +24,33 @@ server:
 phi:
   storage:
     reports-dir: ${user.home}/.phi/reports
+    retain-files-days: ${PHI_RETAIN_FILES_DAYS:0}
+  ocr:
+    enabled: ${PHI_OCR_ENABLED:true}
+    languages: ${PHI_OCR_LANGUAGES:eng}
+    tessdata-path: ${PHI_TESSDATA_PATH:}
+    min-text-layer-chars: ${PHI_OCR_MIN_TEXT_LAYER_CHARS:150}
+    min-letter-chars: ${PHI_OCR_MIN_LETTER_CHARS:100}
+    min-ocr-chars: ${PHI_OCR_MIN_OCR_CHARS:80}
+    render-dpi: ${PHI_OCR_RENDER_DPI:200}
+    page-seg-mode: ${PHI_OCR_PAGE_SEG_MODE:3}
+    max-pages: ${PHI_OCR_MAX_PAGES:0}
   claude:
     api-key: ${CLAUDE_API_KEY:}
     workspace-id: ${CLAUDE_WORKSPACE_ID:}
     model: ${CLAUDE_MODEL:claude-sonnet-4-6}
+    auto-parse: ${PHI_CLAUDE_AUTO_PARSE:true}
+    min-coverage: ${PHI_CLAUDE_MIN_COVERAGE:0.8}
+    vision-fallback: ${PHI_CLAUDE_VISION_FALLBACK:false}
+  jwt:
+    secret: ${PHI_JWT_SECRET:phi-dev-secret-change-me-min-32-chars!!}
+    expiration-hours: ${PHI_JWT_EXPIRATION_HOURS:168}
+  google:
+    client-id: ${GOOGLE_CLIENT_ID:}
+  analytics:
+    duckdb-path: ${user.home}/.phi/analytics.duckdb
+  platform:
+    admin-emails: ${PHI_PLATFORM_ADMIN_EMAILS:}
   cors:
     allowed-origins: http://localhost:8081,http://127.0.0.1:8081
 

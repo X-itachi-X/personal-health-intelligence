@@ -1,26 +1,639 @@
 {
-  "patient": "ankit",
-  "report_date": "2026-09-06",
-  "source": "raw-data-on-this-project.md",
-  "biomarkers": [
-    { "canonical": "vitamin_d", "value": 21.3, "unit": "ng/mL", "reference": "30-100 sufficient" },
-    { "canonical": "lp_a", "value": 76, "unit": "mg/dL", "reference": "0-30" },
-    { "canonical": "alt", "value": 57, "unit": "U/L", "reference": "<50" },
-    { "canonical": "hdl", "value": 48, "unit": "mg/dL", "reference": ">50" },
-    { "canonical": "ldl", "value": 97, "unit": "mg/dL" },
-    { "canonical": "hba1c", "value": 5.5, "unit": "%", "reference": "<5.7" },
-    { "canonical": "rbc", "value": 6.10, "unit": "million/mm3", "reference": "4.5-5.5" },
-    { "canonical": "mcv", "value": 81.6, "unit": "fL", "reference": "83-101" },
-    { "canonical": "hemoglobin", "value": 16.2, "unit": "g/dL", "reference": "13-17" },
-    { "canonical": "ferritin", "value": 162.7, "unit": "ng/mL" },
-    { "canonical": "folate", "value": 3.83, "unit": "ng/mL" },
-    { "canonical": "homocysteine", "value": 14.25, "unit": "µmol/L" }
-  ],
-  "expected_findings": [
-    "elevated_lp_a",
-    "alt_trend_worsening",
-    "vitamin_d_insufficient",
-    "microcytic_rbc_pattern",
-    "folate_low_homocysteine_upper_normal"
-  ]
+  "patient" : "ankit",
+  "report_date" : "2026-09-06",
+  "source_pdf" : "ankit_6972960_20260906073107_stationerypdf_oh_merged.pdf",
+  "source" : "Orange Health Ultra Full Body Checkup — extracted via Claude",
+  "biomarker_count" : 106,
+  "biomarkers" : [ {
+    "canonical" : "absolute_basophil_count",
+    "value" : 21.0,
+    "unit" : "/mm³",
+    "reference" : "0 - 100",
+    "test_name" : "Absolute Basophil Count (ABC)"
+  }, {
+    "canonical" : "absolute_eosinophil_count",
+    "value" : 260.0,
+    "unit" : "/mm³",
+    "reference" : "20 - 500",
+    "test_name" : "Absolute Eosinophil Count (AEC)"
+  }, {
+    "canonical" : "absolute_lymphocyte_count",
+    "value" : 2296.0,
+    "unit" : "/mm³",
+    "reference" : "1000 - 3000",
+    "test_name" : "Absolute Lymphocyte Count (ALC)"
+  }, {
+    "canonical" : "absolute_monocyte_count",
+    "value" : 447.0,
+    "unit" : "/mm³",
+    "reference" : "200 - 1000",
+    "test_name" : "Absolute Monocyte Count (AMC)"
+  }, {
+    "canonical" : "absolute_neutrophil_count",
+    "value" : 7367.0,
+    "unit" : "/mm³",
+    "reference" : "2000 - 7000",
+    "test_name" : "Absolute Neutrophil Count (ANC)"
+  }, {
+    "canonical" : "afp",
+    "value" : 1.3,
+    "unit" : "IU/mL",
+    "reference" : "<5.5",
+    "test_name" : "Alpha Feto Protein (AFP)"
+  }, {
+    "canonical" : "ag_ratio",
+    "value" : 1.8,
+    "unit" : "Ratio",
+    "reference" : "0.8 - 2",
+    "test_name" : "Albumin/Globulin (A/G) Ratio"
+  }, {
+    "canonical" : "albumin",
+    "value" : 4.8,
+    "unit" : "g/dL",
+    "reference" : "3.5 - 5",
+    "test_name" : "Albumin"
+  }, {
+    "canonical" : "alp",
+    "value" : 99.0,
+    "unit" : "U/L",
+    "reference" : "38 - 126",
+    "test_name" : "Alkaline Phosphatase (ALP)"
+  }, {
+    "canonical" : "alt",
+    "value" : 57.0,
+    "unit" : "U/L",
+    "reference" : "<50",
+    "test_name" : "Alanine Transaminase (ALT)"
+  }, {
+    "canonical" : "amylase",
+    "value" : 74.0,
+    "unit" : "U/L",
+    "reference" : "30 - 110",
+    "test_name" : "Amylase"
+  }, {
+    "canonical" : "apo_b_a1_ratio",
+    "value" : 0.93,
+    "unit" : "Ratio",
+    "reference" : "0.35 - 0.98",
+    "test_name" : "Apolipoprotein B/A1 (Apo B/A1) Ratio"
+  }, {
+    "canonical" : "apolipoprotein_a1",
+    "value" : 131.9,
+    "unit" : "mg/dL",
+    "reference" : "105 - 175",
+    "test_name" : "Apolipoprotein A1 (Apo A1)"
+  }, {
+    "canonical" : "apolipoprotein_b",
+    "value" : 122.56,
+    "unit" : "mg/dL",
+    "reference" : "60 - 140",
+    "test_name" : "Apolipoprotein B (Apo B)"
+  }, {
+    "canonical" : "ast",
+    "value" : 37.0,
+    "unit" : "U/L",
+    "reference" : "17 - 49",
+    "test_name" : "Aspartate Aminotransferase (AST/SGOT)"
+  }, {
+    "canonical" : "ast_alt_ratio",
+    "value" : 0.6,
+    "unit" : "Ratio",
+    "reference" : "0.7 - 1.4",
+    "test_name" : "Aspartate Aminotransferase/Alanine Transaminase (AST/ALT) Ratio"
+  }, {
+    "canonical" : "basophils_percent",
+    "value" : 0.2,
+    "unit" : "%",
+    "reference" : "0 - 2",
+    "test_name" : "Basophils"
+  }, {
+    "canonical" : "beta_cell_function",
+    "value" : 159.1,
+    "unit" : "%",
+    "test_name" : "Beta Cell Function"
+  }, {
+    "canonical" : "bun",
+    "value" : 18.2,
+    "unit" : "mg/dL",
+    "reference" : "6 - 20",
+    "test_name" : "Blood Urea Nitrogen (BUN)"
+  }, {
+    "canonical" : "bun_creatinine_ratio",
+    "value" : 18.2,
+    "unit" : "Ratio",
+    "reference" : "10 - 20",
+    "test_name" : "Blood Urea Nitrogen (BUN)/Creatinine Ratio"
+  }, {
+    "canonical" : "ca_19_9",
+    "value" : 17.0,
+    "unit" : "U/mL",
+    "reference" : "0 - 37",
+    "test_name" : "Carbohydrate Antigen 19-9 (CA 19-9)"
+  }, {
+    "canonical" : "calcium",
+    "value" : 9.2,
+    "unit" : "mg/dL",
+    "reference" : "8.4 - 10.2",
+    "test_name" : "Calcium"
+  }, {
+    "canonical" : "cea",
+    "value" : 1.58,
+    "unit" : "ng/mL",
+    "reference" : "<4",
+    "test_name" : "Carcinoembryonic Antigen (CEA)"
+  }, {
+    "canonical" : "chloride",
+    "value" : 105.0,
+    "unit" : "mmol/L",
+    "reference" : "98 - 107",
+    "test_name" : "Chloride"
+  }, {
+    "canonical" : "cholesterol_hdl_ratio",
+    "value" : 3.0,
+    "unit" : "Ratio",
+    "reference" : "3.3 - 4.4",
+    "test_name" : "Cholesterol/High Density Lipoprotein (HDL) Ratio"
+  }, {
+    "canonical" : "cortisol",
+    "value" : 13.1,
+    "unit" : "µg/dL",
+    "reference" : "Morning sample: 4.5-24; Evening sample: 1.8-6.5",
+    "test_name" : "Cortisol, Random"
+  }, {
+    "canonical" : "creatinine",
+    "value" : 1.0,
+    "unit" : "mg/dL",
+    "reference" : "0.66 - 1.25",
+    "test_name" : "Creatinine"
+  }, {
+    "canonical" : "dheas",
+    "value" : 182.9,
+    "unit" : "µg/dL",
+    "reference" : "161.2 - 561.6 (Males 20-29 years)",
+    "test_name" : "Dehydroepiandrosterone Sulphate (DHEAS)"
+  }, {
+    "canonical" : "direct_bilirubin",
+    "value" : 0.41,
+    "unit" : "mg/dL",
+    "reference" : "0 - 0.3",
+    "test_name" : "Bilirubin, Direct"
+  }, {
+    "canonical" : "egfr",
+    "value" : 107.0,
+    "unit" : "ml/min/1.73m²",
+    "reference" : "Normal: => 90; Mild decrease: 60-89; Mild moderate decrease: 45-59; Severe decrease: 15-29; End stage kidney disease: < 15",
+    "test_name" : "Estimated Glomerular Filtration Rate (eGFR)"
+  }, {
+    "canonical" : "eosinophils_percent",
+    "value" : 2.5,
+    "unit" : "%",
+    "reference" : "1 - 6",
+    "test_name" : "Eosinophils"
+  }, {
+    "canonical" : "esr",
+    "value" : 4.0,
+    "unit" : "mm/h",
+    "reference" : "0 - 10",
+    "test_name" : "Erythrocyte Sedimentation Rate (ESR)"
+  }, {
+    "canonical" : "fasting_glucose",
+    "value" : 82.0,
+    "unit" : "mg/dL",
+    "reference" : "70 - 99",
+    "test_name" : "Glucose, Fasting"
+  }, {
+    "canonical" : "fasting_insulin",
+    "value" : 12.5,
+    "unit" : "µIU/mL",
+    "reference" : "2-25",
+    "test_name" : "Insulin, Fasting"
+  }, {
+    "canonical" : "ferritin",
+    "value" : 162.7,
+    "unit" : "ng/mL",
+    "reference" : "21.81 - 274.66",
+    "test_name" : "Ferritin"
+  }, {
+    "canonical" : "folate",
+    "value" : 3.83,
+    "unit" : "ng/mL",
+    "reference" : "3.96 - 16.76",
+    "test_name" : "Folic Acid | Folate | Vitamin B9"
+  }, {
+    "canonical" : "free_t3",
+    "value" : 2.47,
+    "unit" : "pg/mL",
+    "reference" : "1.58 - 3.91",
+    "test_name" : "Triiodothyronine (T3), Free"
+  }, {
+    "canonical" : "free_t4",
+    "value" : 1.13,
+    "unit" : "ng/dL",
+    "reference" : "0.7 - 1.48",
+    "test_name" : "Thyroxine (T4), Free"
+  }, {
+    "canonical" : "free_testosterone",
+    "value" : 8.48,
+    "unit" : "pg/mL",
+    "reference" : "5.01 - 27.78",
+    "test_name" : "Testosterone, Free"
+  }, {
+    "canonical" : "ggt",
+    "value" : 18.0,
+    "unit" : "U/L",
+    "reference" : "15 - 73",
+    "test_name" : "Gamma-Glutamyl Transferase (GGT)"
+  }, {
+    "canonical" : "globulin",
+    "value" : 2.7,
+    "unit" : "g/dL",
+    "reference" : "2.3 - 3.5",
+    "test_name" : "Globulin"
+  }, {
+    "canonical" : "hba1c",
+    "value" : 5.5,
+    "unit" : "%",
+    "reference" : "Normal: < 5.7; Pre-Diabetes: 5.7-6.4; Diabetes: => 6.5",
+    "test_name" : "Glycated Hemoglobin (HbA1C)"
+  }, {
+    "canonical" : "hbsag",
+    "value" : 0.38,
+    "unit" : "S/C Units",
+    "reference" : "Nonreactive: < 0.80; Greyzone: 0.80 - 0.99; Reactive: >= 1.00",
+    "test_name" : "Hepatitis B Surface Antigen (HbsAg)"
+  }, {
+    "canonical" : "hdl",
+    "value" : 48.0,
+    "unit" : "mg/dL",
+    "reference" : "> 50",
+    "test_name" : "High-Density Lipoprotein (HDL) Cholesterol"
+  }, {
+    "canonical" : "hdl_ldl_ratio",
+    "value" : 0.5,
+    "unit" : "Ratio",
+    "reference" : "> 0.4",
+    "test_name" : "High-Density Lipoprotein/Low-Density Lipoprotein (HDL/LDL) Ratio"
+  }, {
+    "canonical" : "hematocrit",
+    "value" : 49.8,
+    "unit" : "%",
+    "reference" : "40 - 50",
+    "test_name" : "Hematocrit (HCT) | Packed Cell Volume (PCV)"
+  }, {
+    "canonical" : "hemoglobin",
+    "value" : 16.2,
+    "unit" : "g/dL",
+    "reference" : "13 - 17",
+    "test_name" : "Hemoglobin (Hb)"
+  }, {
+    "canonical" : "homa_ir",
+    "value" : 1.5,
+    "reference" : "0.7 - 2",
+    "test_name" : "Homeostasis Model Assessment - Insulin Resistance (HOMA-IR)"
+  }, {
+    "canonical" : "homocysteine",
+    "value" : 14.25,
+    "unit" : "µmol/L",
+    "reference" : "6.6 - 14.8",
+    "test_name" : "Homocysteine (HCY)"
+  }, {
+    "canonical" : "hscrp",
+    "value" : 1.259,
+    "unit" : "mg/L",
+    "reference" : "Low: < 1; Average: 1 - 3; High: > 3",
+    "test_name" : "High Sensitivity C-Reactive Protein (HSCRP)"
+  }, {
+    "canonical" : "ige",
+    "value" : 77.0,
+    "unit" : "IU/mL",
+    "reference" : "0 - 100",
+    "test_name" : "Immunoglobulin E (IgE)"
+  }, {
+    "canonical" : "indirect_bilirubin",
+    "value" : 0.42,
+    "unit" : "mg/dL",
+    "reference" : "0.1 - 1.1",
+    "test_name" : "Bilirubin, Indirect"
+  }, {
+    "canonical" : "insulin_sensitivity",
+    "value" : 63.7,
+    "unit" : "%",
+    "test_name" : "Insulin Sensitivity"
+  }, {
+    "canonical" : "ldh",
+    "value" : 235.0,
+    "unit" : "U/L",
+    "reference" : "120 - 246",
+    "test_name" : "Lactate Dehydrogenase (LDH)"
+  }, {
+    "canonical" : "ldl",
+    "value" : 97.0,
+    "unit" : "mg/dL",
+    "reference" : "< 100",
+    "test_name" : "Low-Density Lipoprotein (LDL) Cholesterol"
+  }, {
+    "canonical" : "ldl_hdl_ratio",
+    "value" : 2.0,
+    "unit" : "Ratio",
+    "reference" : "0.5 - 3",
+    "test_name" : "Low-Density Lipoprotein/High-Density Lipoprotein (LDL/HDL) Ratio"
+  }, {
+    "canonical" : "lipase",
+    "value" : 212.0,
+    "unit" : "U/L",
+    "reference" : "23 - 300",
+    "test_name" : "Lipase"
+  }, {
+    "canonical" : "lp_a",
+    "value" : 76.0,
+    "unit" : "mg/dL",
+    "reference" : "0-30",
+    "test_name" : "Lipoprotein(a)"
+  }, {
+    "canonical" : "lymphocytes_percent",
+    "value" : 22.1,
+    "unit" : "%",
+    "reference" : "20 - 40",
+    "test_name" : "Lymphocytes"
+  }, {
+    "canonical" : "magnesium",
+    "value" : 2.1,
+    "unit" : "mg/dL",
+    "reference" : "1.6 - 2.3",
+    "test_name" : "Magnesium (Mg)"
+  }, {
+    "canonical" : "mch",
+    "value" : 26.6,
+    "unit" : "pg",
+    "reference" : "27 - 32",
+    "test_name" : "Mean Corpuscular Hemoglobin (MCH)"
+  }, {
+    "canonical" : "mchc",
+    "value" : 32.5,
+    "unit" : "g/dL",
+    "reference" : "31.5 - 34.5",
+    "test_name" : "Mean Corpuscular Hemoglobin Concentration (MCHC)"
+  }, {
+    "canonical" : "mcv",
+    "value" : 81.6,
+    "unit" : "fL",
+    "reference" : "83 - 101",
+    "test_name" : "Mean Corpuscular Volume (MCV)"
+  }, {
+    "canonical" : "mean_blood_glucose",
+    "value" : 111.0,
+    "unit" : "mg/dL",
+    "reference" : "< 117",
+    "test_name" : "Mean Blood Glucose"
+  }, {
+    "canonical" : "mentzer_index",
+    "value" : 13.4,
+    "unit" : "Index Value",
+    "reference" : "Beta Thalassemia trait: < 14; Iron deficiency anaemia: >= 14",
+    "test_name" : "Mentzer Index"
+  }, {
+    "canonical" : "monocytes_percent",
+    "value" : 4.3,
+    "unit" : "%",
+    "reference" : "2 - 10",
+    "test_name" : "Monocytes"
+  }, {
+    "canonical" : "mpv",
+    "value" : 13.7,
+    "unit" : "fL",
+    "reference" : "7 - 13",
+    "test_name" : "Mean Platelet Volume (MPV)"
+  }, {
+    "canonical" : "neutrophil_lymphocyte_ratio",
+    "value" : 3.0,
+    "unit" : "Ratio",
+    "reference" : "1 - 3",
+    "test_name" : "Neutrophil Lymphocyte Ratio (NLR)"
+  }, {
+    "canonical" : "neutrophils_percent",
+    "value" : 70.9,
+    "unit" : "%",
+    "reference" : "40 - 80",
+    "test_name" : "Neutrophils"
+  }, {
+    "canonical" : "non_hdl_cholesterol",
+    "value" : 119.0,
+    "unit" : "mg/dL",
+    "reference" : "< 130",
+    "test_name" : "Non-High Density Lipoprotein (Non-HDL) Cholesterol"
+  }, {
+    "canonical" : "nt_pro_bnp",
+    "value" : 30.0,
+    "unit" : "pg/mL",
+    "test_name" : "N-Terminal Pro B-Type Natriuretic Peptide (NT-pro BNP)"
+  }, {
+    "canonical" : "phosphorus",
+    "value" : 3.4,
+    "unit" : "mg/dL",
+    "reference" : "2.5 - 4.5",
+    "test_name" : "Phosphorus"
+  }, {
+    "canonical" : "platelet_count",
+    "value" : 203.0,
+    "unit" : "10³/µL",
+    "reference" : "150 - 450",
+    "test_name" : "Platelet Count"
+  }, {
+    "canonical" : "platelet_hematocrit",
+    "value" : 0.279,
+    "unit" : "%",
+    "reference" : "0.2 - 0.5",
+    "test_name" : "Platelet Hematocrit"
+  }, {
+    "canonical" : "potassium",
+    "value" : 4.6,
+    "unit" : "mmol/L",
+    "reference" : "3.5 - 5.5",
+    "test_name" : "Potassium"
+  }, {
+    "canonical" : "psa",
+    "value" : 0.439,
+    "unit" : "ng/mL",
+    "reference" : "<4",
+    "test_name" : "Prostate Specific Antigen (PSA)"
+  }, {
+    "canonical" : "rbc",
+    "value" : 6.1,
+    "unit" : "mill/mm³",
+    "reference" : "4.5 - 5.5",
+    "test_name" : "Red Blood Cells (RBC) Count"
+  }, {
+    "canonical" : "rdw",
+    "value" : 14.5,
+    "unit" : "%",
+    "reference" : "11.6 - 14",
+    "test_name" : "Red Cell Distribution Width (RDW) CV"
+  }, {
+    "canonical" : "sehgal_index",
+    "value" : 1091.6,
+    "unit" : "Index Value",
+    "reference" : "Beta Thalassemia trait: < 972; Iron deficiency anaemia: >= 972",
+    "test_name" : "Sehgal Index"
+  }, {
+    "canonical" : "serum_iron",
+    "value" : 80.0,
+    "unit" : "µg/dL",
+    "reference" : "49 - 181",
+    "test_name" : "Iron"
+  }, {
+    "canonical" : "shbg",
+    "value" : 28.4,
+    "unit" : "nmol/L",
+    "reference" : "14.4-70.7",
+    "test_name" : "Sex Hormone Binding Globulin (SHBG)"
+  }, {
+    "canonical" : "sodium",
+    "value" : 142.0,
+    "unit" : "mmol/L",
+    "reference" : "137 - 145",
+    "test_name" : "Sodium"
+  }, {
+    "canonical" : "testosterone",
+    "value" : 469.84,
+    "unit" : "ng/dL",
+    "reference" : "260-1000",
+    "test_name" : "Testosterone"
+  }, {
+    "canonical" : "tibc",
+    "value" : 405.0,
+    "unit" : "µg/dL",
+    "reference" : "261 - 462",
+    "test_name" : "Total Iron Binding Capacity (TIBC)"
+  }, {
+    "canonical" : "total_bilirubin",
+    "value" : 0.83,
+    "unit" : "mg/dL",
+    "reference" : "0.2 - 1.3",
+    "test_name" : "Bilirubin, Total"
+  }, {
+    "canonical" : "total_cholesterol",
+    "value" : 167.0,
+    "unit" : "mg/dL",
+    "reference" : "< 200",
+    "test_name" : "Cholesterol, Total"
+  }, {
+    "canonical" : "total_protein",
+    "value" : 7.6,
+    "unit" : "g/dL",
+    "reference" : "6 - 8.3",
+    "test_name" : "Protein"
+  }, {
+    "canonical" : "total_t3",
+    "value" : 0.94,
+    "unit" : "ng/mL",
+    "reference" : "0.35 - 1.93",
+    "test_name" : "Triiodothyronine (T3), Total"
+  }, {
+    "canonical" : "total_t4",
+    "value" : 6.77,
+    "unit" : "µg/dL",
+    "reference" : "4.87 - 11.72",
+    "test_name" : "Thyroxine (T4), Total"
+  }, {
+    "canonical" : "tpo_antibody",
+    "value" : 4.7,
+    "unit" : "IU/mL",
+    "reference" : "< 8",
+    "test_name" : "Thyroid Peroxidase Antibody (TPO)"
+  }, {
+    "canonical" : "transferrin_saturation",
+    "value" : 19.75,
+    "unit" : "%",
+    "reference" : "16 - 55",
+    "test_name" : "Transferrin Saturation"
+  }, {
+    "canonical" : "triglycerides",
+    "value" : 105.0,
+    "unit" : "mg/dL",
+    "reference" : "< 150",
+    "test_name" : "Triglycerides"
+  }, {
+    "canonical" : "tsh",
+    "value" : 3.1248,
+    "unit" : "µIU/mL",
+    "reference" : "0.35 - 4.94",
+    "test_name" : "Thyroid Stimulating Hormone (TSH)"
+  }, {
+    "canonical" : "uibc",
+    "value" : 325.0,
+    "unit" : "µg/dL",
+    "reference" : "110 - 370",
+    "test_name" : "Unbound Iron Binding Capacity (UIBC)"
+  }, {
+    "canonical" : "urea",
+    "value" : 39.0,
+    "unit" : "mg/dL",
+    "reference" : "19 - 43",
+    "test_name" : "Urea"
+  }, {
+    "canonical" : "uric_acid",
+    "value" : 6.5,
+    "unit" : "mg/dL",
+    "reference" : "3.5 - 8.5",
+    "test_name" : "Uric Acid"
+  }, {
+    "canonical" : "urine_albumin_creatinine_ratio",
+    "value" : 16.4,
+    "unit" : "mg/g Creatinine",
+    "reference" : "Normal: < 30; Microalbuminuria: 30-300; Macroalbuminuria: > 300",
+    "test_name" : "Microalbumin/Creatinine Ratio"
+  }, {
+    "canonical" : "urine_creatinine",
+    "value" : 36.6,
+    "unit" : "mg/dL",
+    "reference" : "24 - 292",
+    "test_name" : "Creatinine - Urine"
+  }, {
+    "canonical" : "urine_microalbumin",
+    "value" : 0.6,
+    "unit" : "mg/dL",
+    "reference" : "< 30",
+    "test_name" : "Microalbumin"
+  }, {
+    "canonical" : "urine_ph",
+    "value" : 6.5,
+    "reference" : "5 - 8",
+    "test_name" : "pH"
+  }, {
+    "canonical" : "urine_specific_gravity",
+    "value" : 1.005,
+    "reference" : "1.001 - 1.035",
+    "test_name" : "Specific Gravity"
+  }, {
+    "canonical" : "vitamin_b12",
+    "value" : 338.0,
+    "unit" : "pg/mL",
+    "reference" : "187 - 883",
+    "test_name" : "Vitamin B12, Cyanocobalamin"
+  }, {
+    "canonical" : "vitamin_d",
+    "value" : 21.3,
+    "unit" : "ng/mL",
+    "reference" : "Deficient: < 20; Insufficient: 20-30; Sufficient: 30-100; Potential Toxicity: > 100",
+    "test_name" : "Vitamin D, 25-Hydroxy"
+  }, {
+    "canonical" : "vldl",
+    "value" : 21.0,
+    "unit" : "mg/dL",
+    "reference" : "< 30",
+    "test_name" : "Very Low-Density Lipoprotein (VLDL) Cholesterol"
+  }, {
+    "canonical" : "wbc",
+    "value" : 10390.0,
+    "unit" : "cells/mm³",
+    "reference" : "4000 - 10000",
+    "test_name" : "Total White Blood Cell Count (TC)"
+  }, {
+    "canonical" : "zinc",
+    "value" : 96.64,
+    "unit" : "µg/dL",
+    "reference" : "54-151",
+    "test_name" : "Zinc by ICPMS, Serum"
+  } ],
+  "expected_findings" : [ "elevated_lp_a", "alt_elevated", "vitamin_d_insufficient", "microcytic_rbc_pattern", "folate_low_homocysteine_upper_normal", "hdl_below_target" ]
 }

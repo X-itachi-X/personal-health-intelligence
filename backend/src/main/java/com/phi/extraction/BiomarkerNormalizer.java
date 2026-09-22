@@ -10,7 +10,17 @@ public class BiomarkerNormalizer {
     private static final Map<String, String> ALIASES = Map.ofEntries(
             Map.entry("vitamin d", "vitamin_d"),
             Map.entry("vitamin d 25-hydroxy", "vitamin_d"),
+            Map.entry("vitamin d 25 hydroxy", "vitamin_d"),
             Map.entry("25-oh vitamin d", "vitamin_d"),
+            Map.entry("glycated hemoglobin (hba1c)", "hba1c"),
+            Map.entry("absolute neutrophil count (anc)", "absolute_neutrophil_count"),
+            Map.entry("absolute lymphocyte count (alc)", "absolute_lymphocyte_count"),
+            Map.entry("absolute monocyte count (amc)", "absolute_monocyte_count"),
+            Map.entry("absolute eosinophil count (aec)", "absolute_eosinophil_count"),
+            Map.entry("absolute basophil count (abc)", "absolute_basophil_count"),
+            Map.entry("vitamin b12 cyanocobalamin", "vitamin_b12"),
+            Map.entry("folic acid folate vitamin b9", "folate"),
+            Map.entry("hepatitis b surface antigen (hbsag)", "hbsag"),
             Map.entry("lipoprotein (a)", "lp_a"),
             Map.entry("lipoprotein(a)", "lp_a"),
             Map.entry("lp(a)", "lp_a"),
@@ -47,6 +57,15 @@ public class BiomarkerNormalizer {
                 .replaceAll("[^a-z0-9()\\s-]", " ")
                 .replaceAll("\\s+", " ")
                 .trim();
-        return ALIASES.getOrDefault(key, key.replace(' ', '_'));
+        if (ALIASES.containsKey(key)) {
+            return ALIASES.get(key);
+        }
+        if (key.contains("vitamin d") && key.contains("25")) {
+            return "vitamin_d";
+        }
+        if (key.contains("hba1c") || key.contains("glycated hemoglobin")) {
+            return "hba1c";
+        }
+        return key.replace(' ', '_');
     }
 }

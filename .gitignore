@@ -1,3 +1,6 @@
+# Health monitor session logs (reboot diagnostics)
+infrastructure/ci/logs/
+
 # Java / Gradle
 backend/.gradle/
 backend/build/
@@ -15,6 +18,8 @@ backend/application-local.properties
 # Node / Expo
 mobile/node_modules/
 mobile/.expo/
+mobile/android/
+mobile/ios/
 mobile/dist/
 mobile/web-build/
 mobile/.env
@@ -36,6 +41,10 @@ mobile/.env.local
 **/secrets/
 *.pem
 *.key
+phi.env.staging
+phi.env.age
+**/phi.age.key
+infrastructure/edge/phi.age.pub
 
 # Data (keep structure, ignore actual health PDFs)
 data/golden_dataset/**/*.pdf

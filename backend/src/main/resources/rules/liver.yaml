@@ -1,0 +1,9 @@
+id: alt_elevated
+domain: liver
+inputs:
+  - alt
+rules:
+  - when: "alt > 50"
+    severity: medium
+    action: lifestyle_review
+    message: "ALT is above the usual reference range. Review alcohol, medications, and activity with your doctor."

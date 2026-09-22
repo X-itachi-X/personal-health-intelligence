@@ -1,0 +1,10 @@
+id: microcytic_rbc_pattern
+domain: hematology
+inputs:
+  - mcv
+  - mch
+rules:
+  - when: "mcv < 83 and mch < 27"
+    severity: medium
+    action: doctor_discussion
+    message: "Red blood cells look smaller than usual (microcytic pattern). Discuss iron studies or further evaluation with your doctor."

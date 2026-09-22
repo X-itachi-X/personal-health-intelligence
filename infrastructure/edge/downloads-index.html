@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#EBF3F8" />
+  <title>PHI — Android test build</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #ebf3f8;
+      --bg-2: #e4edf5;
+      --surface: rgba(248, 252, 255, 0.48);
+      --border: rgba(168, 191, 212, 0.38);
+      --border-light: rgba(255, 255, 255, 0.9);
+      --text: #4a5d73;
+      --muted: #6e8198;
+      --blue: #8ba8c4;
+      --blue-dark: #7a97b5;
+      --blue-light: #d8e6f2;
+      --periwinkle: #c4cedf;
+      --icy: #e3eff8;
+      --radius: 16px;
+      --shadow: 0 8px 28px rgba(122, 151, 181, 0.14);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.55;
+    }
+
+    .backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background: linear-gradient(165deg, var(--bg) 0%, var(--icy) 42%, var(--bg-2) 100%);
+      overflow: hidden;
+    }
+
+    .blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(56px);
+      opacity: 0.55;
+    }
+
+    .blob-a {
+      width: 320px;
+      height: 320px;
+      top: -80px;
+      right: -90px;
+      background: var(--periwinkle);
+    }
+
+    .blob-b {
+      width: 280px;
+      height: 280px;
+      bottom: 50px;
+      left: -90px;
+      background: var(--icy);
+    }
+
+    .page {
+      position: relative;
+      z-index: 1;
+      max-width: 40rem;
+      margin: 0 auto;
+      padding: 2.5rem 1.25rem 3rem;
+    }
+
+    .hero {
+      text-align: center;
+      margin-bottom: 1.75rem;
+    }
+
+    .logo {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 3.5rem;
+      height: 3.5rem;
+      border-radius: 14px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      backdrop-filter: blur(20px) saturate(140%);
+      -webkit-backdrop-filter: blur(20px) saturate(140%);
+      box-shadow: var(--shadow);
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      color: var(--blue-dark);
+      margin-bottom: 1rem;
+    }
+
+    h1 {
+      margin: 0 0 0.5rem;
+      font-size: clamp(1.65rem, 4vw, 2rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--text);
+    }
+
+    .tagline {
+      margin: 0;
+      color: var(--muted);
+      font-size: 1rem;
+    }
+
+    .glass {
+      position: relative;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      backdrop-filter: blur(20px) saturate(140%);
+      -webkit-backdrop-filter: blur(20px) saturate(140%);
+      box-shadow: var(--shadow);
+      padding: 1.25rem 1.35rem;
+      margin-bottom: 1rem;
+    }
+
+    .glass::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      border-top: 1px solid var(--border-light);
+      pointer-events: none;
+    }
+
+    .version-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0.35rem 0.75rem;
+      border-radius: 8px;
+      background: var(--blue-light);
+      color: var(--blue-dark);
+      font-size: 0.82rem;
+      font-weight: 700;
+      margin-bottom: 0.85rem;
+    }
+
+    .version-pill .dot {
+      width: 0.45rem;
+      height: 0.45rem;
+      border-radius: 50%;
+      background: var(--blue);
+    }
+
+    .meta {
+      color: var(--muted);
+      font-size: 0.92rem;
+      margin: 0 0 1rem;
+    }
+
+    #notes {
+      margin: 0 0 1rem;
+      padding: 0.75rem 0.9rem;
+      border-radius: 12px;
+      background: rgba(248, 252, 255, 0.55);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    a.btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.55rem;
+      width: 100%;
+      padding: 0.9rem 1.25rem;
+      border-radius: 12px;
+      background: var(--blue);
+      border: none;
+      color: #fff;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 1rem;
+      box-shadow: 0 4px 14px rgba(139, 168, 196, 0.35);
+      transition: background 0.15s ease, transform 0.15s ease;
+    }
+
+    a.btn:hover {
+      background: var(--blue-dark);
+      transform: translateY(-1px);
+    }
+
+    a.btn svg {
+      width: 1.15rem;
+      height: 1.15rem;
+      fill: currentColor;
+    }
+
+    .steps-title {
+      margin: 0 0 0.75rem;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    ol {
+      margin: 0;
+      padding-left: 1.15rem;
+      color: var(--muted);
+    }
+
+    li { margin: 0.45rem 0; }
+    li strong { color: var(--text); font-weight: 600; }
+
+    code {
+      font-size: 0.85em;
+      padding: 0.12rem 0.4rem;
+      border-radius: 6px;
+      background: var(--blue-light);
+      color: var(--blue-dark);
+    }
+
+    .footer {
+      margin-top: 1.5rem;
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .footer a {
+      color: var(--blue-dark);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .footer a:hover { text-decoration: underline; }
+
+    .footer small {
+      display: block;
+      margin-top: 0.75rem;
+      opacity: 0.85;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="backdrop" aria-hidden="true">
+    <div class="blob blob-a"></div>
+    <div class="blob blob-b"></div>
+  </div>
+
+  <main class="page">
+    <header class="hero">
+      <div class="logo" aria-hidden="true">PHI</div>
+      <h1>Personal Health Intelligence</h1>
+      <p class="tagline">Early tester build — same account and data as the web app on this server.</p>
+    </header>
+
+    <section class="glass" aria-labelledby="download-heading">
+      <div id="version-line" class="version-pill"><span class="dot"></span><span>Loading version…</span></div>
+      <p id="build-meta" class="meta" hidden></p>
+      <p id="notes" hidden></p>
+      <h2 id="download-heading" class="sr-only">Download</h2>
+      <a class="btn" id="apk-link" href="phi-latest.apk">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.6 11.48v3.84c0 .44-.05.84-.15 1.2a4.3 4.3 0 0 1-4.25 3.5 4.17 4.17 0 0 1-4.2-3.5 6.52 6.52 0 0 1-.08-1.2v-3.84H4.8a.8.8 0 0 1-.57-.24.8.8 0 0 1 0-1.13L11.63 2.3a.8.8 0 0 1 1.13 0l7.4 7.4a.8.8 0 0 1 0 1.13.8.8 0 0 1-.56.24h-2zM12 15.2a2.4 2.4 0 1 0 0 4.8 2.4 2.4 0 0 0 0-4.8z"/></svg>
+        Download Android APK
+      </a>
+    </section>
+
+    <section class="glass">
+      <p class="steps-title">Install on your phone</p>
+      <ol>
+        <li>Download the APK using the button above.</li>
+        <li>If prompted, allow <strong>Install unknown apps</strong> for your browser or Files app.</li>
+        <li>Open PHI and sign in — use <strong>this server</strong>, not a dev PC.</li>
+        <li>Updates: reopen the app — it checks <code>/downloads/android.json</code> and prompts when a newer build is published.</li>
+      </ol>
+    </section>
+
+    <footer class="footer">
+      <p>Prefer browser? <a href="/">Open web app</a></p>
+      <small>API health: <a href="/api/v1/health">/api/v1/health</a></small>
+    </footer>
+  </main>
+
+  <script>
+    fetch("android.json")
+      .then((r) => r.json())
+      .then((m) => {
+        const pill = document.getElementById("version-line");
+        pill.innerHTML =
+          '<span class="dot"></span><span>Build v' + m.version + " · code " + m.versionCode + "</span>";
+
+        const meta = document.getElementById("build-meta");
+        meta.textContent = "Published " + new Date(m.publishedAt).toLocaleString();
+        meta.hidden = false;
+
+        if (m.releaseNotes) {
+          const notes = document.getElementById("notes");
+          notes.textContent = m.releaseNotes;
+          notes.hidden = false;
+        }
+      })
+      .catch(() => {
+        document.getElementById("version-line").innerHTML =
+          '<span class="dot"></span><span>Latest test build</span>';
+      });
+  </script>
+</body>
+</html>

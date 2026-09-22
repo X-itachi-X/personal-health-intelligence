@@ -9,3 +9,33 @@ spring:
       ddl-auto: create-drop
   flyway:
     enabled: false
+
+phi:
+  ocr:
+    enabled: false
+    languages: eng
+    tessdata-path:
+    min-text-layer-chars: 150
+    min-letter-chars: 100
+    min-ocr-chars: 80
+    render-dpi: 200
+    page-seg-mode: 3
+    max-pages: 0
+  storage:
+    reports-dir: ${java.io.tmpdir}/phi-test-reports
+    retain-files-days: 0
+  claude:
+    api-key: ${CLAUDE_API_KEY:}
+    workspace-id: ${CLAUDE_WORKSPACE_ID:}
+    model: ${CLAUDE_MODEL:claude-sonnet-4-6}
+    auto-parse: true
+    min-coverage: 0.8
+  jwt:
+    secret: phi-test-secret-change-me-min-32-chars!!
+    expiration-hours: 1
+  google:
+    client-id: test-google-client-id
+  analytics:
+    duckdb-path: ${java.io.tmpdir}/phi-test-analytics.duckdb
+  platform:
+    admin-emails: ops@test.phi

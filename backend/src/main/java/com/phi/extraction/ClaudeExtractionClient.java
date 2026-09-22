@@ -30,11 +30,17 @@ public class ClaudeExtractionClient {
 
     private final PhiProperties properties;
     private final ClaudeResponseParser parser;
+    private final ClaudeUsageParser usageParser;
     private final HttpClient httpClient;
 
-    public ClaudeExtractionClient(PhiProperties properties, ClaudeResponseParser parser) {
+    public ClaudeExtractionClient(
+            PhiProperties properties,
+            ClaudeResponseParser parser,
+            ClaudeUsageParser usageParser
+    ) {
         this.properties = properties;
         this.parser = parser;
+        this.usageParser = usageParser;
         this.httpClient = HttpClient.newBuilder()
                 .connectTimeout(Duration.ofSeconds(30))
                 .build();
@@ -45,11 +51,12 @@ public class ClaudeExtractionClient {
         return key != null && !key.isBlank();
     }
 
-    public List<ClaudeBiomarkerDto> extractBiomarkers(String reportText) throws Exception {
+    public ClaudeExtractionResult extractBiomarkers(String reportText) throws Exception {
         if (!isConfigured()) {
             throw new IllegalStateException("CLAUDE_API_KEY is not configured");
         }
 
+        String model = properties.claude().model();
         String userPrompt = "Extract all lab test results from this report text:\n\n" + truncate(reportText);
         String requestBody = buildRequestBody(userPrompt);
 
@@ -74,7 +81,10 @@ public class ClaudeExtractionClient {
             throw new IllegalStateException("Claude API error " + response.statusCode() + ": " + response.body());
         }
 
-        return parser.parseBiomarkers(response.body());
+        String body = response.body();
+        List<ClaudeBiomarkerDto> biomarkers = parser.parseBiomarkers(body);
+        ClaudeApiUsage usage = usageParser.parse(body, model);
+        return new ClaudeExtractionResult(biomarkers, usage);
     }
 
     private String buildRequestBody(String userPrompt) {

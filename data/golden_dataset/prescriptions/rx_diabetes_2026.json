@@ -1,0 +1,28 @@
+{
+  "patient": "golden_prescription",
+  "report_date": "2026-09-06",
+  "source": "synthetic_indian_rx",
+  "source_text": "Rx\nDr. Sharma\n1. Tab. Metformin 500 mg 1-0-1 after food for 30 days\n2. Cap. Telmisartan 40 mg OD\n3. Cap. Amoxicillin 500 mg TDS for 5 days\n",
+  "medications": [
+    {
+      "medication_name": "Metformin",
+      "dosage": "500 mg",
+      "schedule_text": "1-0-1",
+      "course_type": "ACUTE",
+      "duration_days": 30
+    },
+    {
+      "medication_name": "Telmisartan",
+      "dosage": "40 mg",
+      "schedule_text": "OD",
+      "course_type": "CHRONIC"
+    },
+    {
+      "medication_name": "Amoxicillin",
+      "dosage": "500 mg",
+      "schedule_text": "TDS",
+      "course_type": "ACUTE",
+      "duration_days": 5
+    }
+  ]
+}

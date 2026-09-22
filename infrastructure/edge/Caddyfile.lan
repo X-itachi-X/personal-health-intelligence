@@ -1,0 +1,25 @@
+# HTTP on LAN + Tailscale Funnel (HTTPS terminates at Tailscale, forwards to :80).
+# Routes: API → Spring Boot, /downloads → APK, everything else → web static export.
+
+:80 {
+	encode gzip
+
+	handle /downloads/* {
+		root * /var/phi/public
+		file_server
+	}
+
+	handle /api/* {
+		reverse_proxy localhost:8080
+	}
+
+	handle /actuator/* {
+		reverse_proxy localhost:8080
+	}
+
+	handle {
+		root * /var/phi/www
+		try_files {path} /index.html
+		file_server
+	}
+}

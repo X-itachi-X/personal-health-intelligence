@@ -1,0 +1,34 @@
+---
+description: PHI engineering north star — database as truth, Claude used sparingly at ingest only
+alwaysApply: true
+---
+
+# PHI Engineering Principles
+
+Read `documentation/00-engineering-principles.md` for full context.
+
+## What we are building
+
+An **engineered health data platform** — structured biomarker memory, trends, family analytics, SQL/DuckDB queries.
+
+## What we are NOT building
+
+- A ChatGPT/Gemini chat wrapper
+- A PDF dumping ground
+- Features that send full documents or history to Claude on every user action
+
+## Rules for every change
+
+1. **H2 `biomarker_values` + DuckDB are source of truth** — not PDFs.
+2. **PDFs/images are ephemeral** — local extract → save `extracted_text` → purge file.
+3. **AI is always last resort** — never first. Order: PDF text → OCR → rules → Claude (text parse) → Claude vision (optional, only if local text fails).
+4. **Claude = ingest boundary only** — unstructured text → JSON biomarkers, **once per unique report**. Never send PDF bytes by default.
+5. **If SQL can answer it, do not call Claude** — trends, compare, out-of-range, lists.
+6. **Staged pipeline** — Phase 1 local (free) → DB checkpoint → Phase 2 rules → Phase 3 Claude from DB text only if needed.
+7. **Future chatbot** — SQL tool-calling over `biomarker_values`, not PDF dumps.
+
+## Config
+
+- `PHI_RETAIN_FILES_DAYS=0` — purge PDF after Phase 1
+- `PHI_CLAUDE_AUTO_PARSE=false` — dev token savings; manual `POST .../parse`
+- `PHI_CLAUDE_VISION_FALLBACK=false` — vision only when OCR/PDF text fails (off by default)

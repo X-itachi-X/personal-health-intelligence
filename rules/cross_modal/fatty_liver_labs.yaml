@@ -1,0 +1,11 @@
+id: fatty_liver_alt
+domain: cross_modal
+title: Fatty liver on imaging + liver labs
+severity: info
+imaging_text_any:
+  - fatty liver
+  - hepatic steatosis
+  - grade i fatty
+biomarker_present:
+  - alt
+message: "A recent {modality} noted fatty liver changes. Compare with your ALT and other liver tests in trends."

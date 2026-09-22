@@ -1,0 +1,3 @@
+# Let EAS run `expo prebuild` from app.json instead of uploading stale native folders.
+android/
+ios/

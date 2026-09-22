@@ -1,0 +1,12 @@
+id: kidney_imaging_creatinine
+domain: cross_modal
+title: Kidney imaging + renal labs
+severity: info
+imaging_text_any:
+  - renal
+  - kidney
+  - hydronephrosis
+  - cyst
+biomarker_present:
+  - creatinine
+message: "A recent {modality} reported kidney findings. Review creatinine and related labs over time."

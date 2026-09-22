@@ -1,0 +1,28 @@
+# Automatic HTTPS via Let's Encrypt — __PHI_DOMAIN__ is replaced by configure-proxy.sh
+
+__PHI_DOMAIN__ {
+	encode gzip
+
+	handle /downloads/* {
+		root * /var/phi/public
+		file_server
+	}
+
+	handle /api/* {
+		reverse_proxy localhost:8080
+	}
+
+	handle /actuator/* {
+		reverse_proxy localhost:8080
+	}
+
+	handle {
+		root * /var/phi/www
+		try_files {path} /index.html
+		file_server
+	}
+}
+
+http://__PHI_DOMAIN__ {
+	redir https://{host}{uri} permanent
+}

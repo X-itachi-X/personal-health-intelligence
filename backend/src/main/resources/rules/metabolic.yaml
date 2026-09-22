@@ -1,0 +1,9 @@
+id: vitamin_d_insufficient
+domain: metabolic
+inputs:
+  - vitamin_d
+rules:
+  - when: "vitamin_d >= 20 and vitamin_d < 30"
+    severity: medium
+    action: supplement_discussion
+    message: "Vitamin D is in the insufficient range. Discuss supplementation and sun exposure with your doctor."

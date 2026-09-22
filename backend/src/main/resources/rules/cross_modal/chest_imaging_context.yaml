@@ -1,0 +1,10 @@
+id: chest_imaging_context
+domain: cross_modal
+title: Chest imaging on file
+severity: info
+imaging_text_any:
+  - cardiomegaly
+  - effusion
+  - pulmonary
+  - chest
+message: "Your latest chest {modality} ({study_date}): {impression_snippet}"

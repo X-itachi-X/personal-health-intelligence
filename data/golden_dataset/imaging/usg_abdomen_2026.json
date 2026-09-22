@@ -1,0 +1,13 @@
+{
+  "patient": "golden_imaging",
+  "report_date": "2026-03-15",
+  "source": "synthetic_usg",
+  "source_text": "ULTRASOUND ABDOMEN\nHospital: City Diagnostic Centre\nFindings:\n- Liver is normal in size with increased echogenicity suggestive of grade I fatty liver.\n- Kidneys are normal in size and echotexture.\n- Spleen and pancreas appear unremarkable.\nImpression: Grade I fatty liver. Otherwise unremarkable study.\n",
+  "expected": {
+    "modality": "ULTRASOUND",
+    "body_region": "abdomen",
+    "impression_contains": "fatty liver",
+    "facility_contains": "City Diagnostic",
+    "min_findings": 1
+  }
+}

@@ -1,0 +1,35 @@
+# DB-driven follow-up intervals — no Claude. Applied to latest biomarker per person.
+general:
+  panel_months: 12
+  panel_label: Routine health checkup
+  due_soon_days: 30
+
+rules:
+  - canonical: vitamin_d
+    display_name: Vitamin D
+    abnormal_months: 3
+    normal_months: 12
+  - canonical: hba1c
+    display_name: HbA1c
+    abnormal_months: 3
+    normal_months: 12
+  - canonical: ldl_cholesterol
+    display_name: LDL cholesterol
+    abnormal_months: 3
+    normal_months: 12
+  - canonical: fasting_glucose
+    display_name: Fasting glucose
+    abnormal_months: 3
+    normal_months: 12
+  - canonical: triglycerides
+    display_name: Triglycerides
+    abnormal_months: 3
+    normal_months: 12
+  - canonical: tsh
+    display_name: TSH
+    abnormal_months: 2
+    normal_months: 12
+  - canonical: creatinine
+    display_name: Kidney function (creatinine)
+    abnormal_months: 3
+    normal_months: 12

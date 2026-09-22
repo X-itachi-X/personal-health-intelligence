@@ -1,0 +1,9 @@
+id: hdl_below_target
+domain: cardiovascular
+inputs:
+  - hdl
+rules:
+  - when: "hdl < 50"
+    severity: medium
+    action: lifestyle_review
+    message: "HDL is below the usual target. Discuss diet, activity, and cardiovascular risk with your doctor."

@@ -1,5 +1,7 @@
-# PHI reverse proxy — configure domain/TLS for production
+# Default LAN proxy — copied to /etc/caddy/Caddyfile by setup.sh.
+# For automatic HTTPS, set PHI_DOMAIN in /etc/phi/env and run configure-proxy.sh.
 
 :80 {
-    reverse_proxy localhost:8080
+	encode gzip
+	reverse_proxy localhost:8080
 }

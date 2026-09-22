@@ -1,0 +1,10 @@
+id: folate_low_homocysteine_upper_normal
+domain: hematology
+inputs:
+  - folate
+  - homocysteine
+rules:
+  - when: "folate < 3.96 and homocysteine >= 14"
+    severity: medium
+    action: supplement_discussion
+    message: "Folate is low while homocysteine is trending high. Discuss B-vitamin supplementation with your doctor."

@@ -1,0 +1,76 @@
+---
+description: PHI mobile UI design system — use shared components, theme tokens, and Ionicons for all new screens
+globs: mobile/**/*.tsx
+alwaysApply: false
+---
+
+# Mobile UI consistency (PHI)
+
+When adding or editing mobile screens, follow the established design system. Do not introduce one-off styles, emoji icons, or raw `ActivityIndicator` spinners on full screens.
+
+## Design tokens
+
+Import from `mobile/lib/theme.ts` only — never hardcode hex colors or spacing:
+
+- **Colors:** `colors.primary` (teal accent), `colors.text`, `colors.textMuted`, semantic `danger`/`success`/`warning`
+- **Spacing:** `spacing.sm` (8), `spacing.md` (16), `spacing.lg` (24)
+- **Radii:** `radii.md` (12), `radii.lg` (16)
+- **Typography:** `typography.hero`, `typography.title`, `typography.body`, `typography.data` (tabular nums for biomarkers)
+
+One accent color per view. Teal is for primary actions and active nav only.
+
+## Shared components (`mobile/components/ui/`)
+
+| Need | Use |
+|------|-----|
+| Page layout + scroll | `Screen` |
+| Elevated surface | `Card` (variants: default, muted, outlined, accent) |
+| Primary/secondary action | `Button` (never raw `Pressable` for CTAs) |
+| Status chip | `Badge` |
+| Icon | `Icon` from `@expo/vector-icons` via `Icon` wrapper |
+| Tappable card/row | `AnimatedPressable` |
+| Staggered entrance | `FadeInView` with `delay` |
+| Loading placeholder | `Skeleton` / `SkeletonCard` |
+| Empty list | `EmptyState` with icon + one CTA |
+| Modal sheet | `BottomSheet` |
+
+Import from `../../components/ui` (or `../components/ui` from `app/`).
+
+## Icons
+
+- Use `Icon` with Ionicons names — **never emoji** for navigation or actions
+- Nav icon map lives in `mobile/lib/icons.ts` (`navIcons`)
+- Sizes: `iconSize.sm` (18), `md` (22), `lg` (28), `xl` (40)
+
+## Motion
+
+- Press feedback: `AnimatedPressable` (scale 0.97, spring)
+- Screen sections: `FadeInView` with staggered `delay` (0, 60, 120…)
+- Animate only `transform` and `opacity` — no layout property animation
+- Keep interaction feedback under 200ms
+
+## Text in pressables
+
+All visible text inside `AnimatedPressable` or `Button` must be in `<Text>`. Use template strings for dynamic labels:
+
+```tsx
+// Good
+<Button>{`Switch to ${mode}`}</Button>
+
+// Also good — Button wraps text-only children automatically
+<Button>Switch to {mode}</Button>
+
+// Bad — raw string as direct child of View/Animated.View
+<AnimatedPressable><Text>Label</Text></AnimatedPressable> // OK
+<AnimatedPressable>Label</AnimatedPressable> // ERROR
+```
+
+## Loading & errors
+
+- Full-screen loading: `SkeletonCard` rows, not centered spinners
+- Inline errors: `Card variant="outlined"` with `Icon name="alert-circle-outline"` + message
+- API auth failures (401/403): return empty data gracefully, don't surface as uncaught errors
+
+## Reference
+
+See `mobile/DESIGN.md` for the full design contract.

@@ -19,6 +19,8 @@ spring:
 phi:
   storage:
     reports-dir: /var/phi/reports
+  analytics:
+    duckdb-path: /var/phi/data/analytics.duckdb
   cors:
     allowed-origins: ${PHI_CORS_ORIGINS:http://localhost:8081}
 

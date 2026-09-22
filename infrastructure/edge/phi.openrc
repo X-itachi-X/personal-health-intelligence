@@ -6,9 +6,12 @@ description="Personal Health Intelligence API"
 command="/usr/bin/java"
 command_args="-jar /var/phi/phi.jar"
 command_background=true
+supervisor=supervise-daemon
+respawn_delay=2
+respawn_max=0
 pidfile="/run/${RC_SVCNAME}.pid"
-output_log="/var/log/phi.log"
-error_log="/var/log/phi.log"
+output_log="/var/phi/app.log"
+error_log="/var/phi/app.log"
 
 depend() {
     need net
@@ -16,10 +19,17 @@ depend() {
 }
 
 start_pre() {
-    export SPRING_PROFILES_ACTIVE=prod
-    export CLAUDE_API_KEY="${CLAUDE_API_KEY:-}"
-    export PHI_H2_PASSWORD="${PHI_H2_PASSWORD:-}"
-    export PHI_CORS_ORIGINS="${PHI_CORS_ORIGINS:-}"
+    for decrypt in /opt/phi-edge/decrypt-env.sh /opt/phi/infrastructure/edge/decrypt-env.sh; do
+        if [ -f "$decrypt" ]; then
+            # shellcheck source=/dev/null
+            . "$decrypt"
+            load_phi_env
+            break
+        fi
+    done
+
+    export SPRING_PROFILES_ACTIVE="${SPRING_PROFILES_ACTIVE:-prod}"
+
     checkpath -d -m 0755 -o dev:dev /var/phi/data /var/phi/reports /var/phi/backups
-    checkpath -f -m 0644 -o dev:dev /var/log/phi.log
+    checkpath -f -m 0644 -o dev:dev /var/phi/app.log
 }
