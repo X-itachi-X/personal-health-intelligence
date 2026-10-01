@@ -4,11 +4,16 @@ import com.phi.access.AccessControlService;
 import com.phi.auth.AuthenticatedAccount;
 import com.phi.domain.DocumentType;
 import com.phi.domain.ExtractionStatus;
+import com.phi.domain.LabReport;
+import com.phi.domain.LabReportRepository;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,16 +21,19 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class RetestReminderService {
 
-    private final JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate analyticsJdbc;
+    private final LabReportRepository labReportRepository;
     private final AccessControlService accessControl;
     private final RetestIntervalLoader intervalLoader;
 
     public RetestReminderService(
-            JdbcTemplate jdbcTemplate,
+            @Qualifier("analyticsJdbcTemplate") JdbcTemplate analyticsJdbc,
+            LabReportRepository labReportRepository,
             AccessControlService accessControl,
             RetestIntervalLoader intervalLoader
     ) {
-        this.jdbcTemplate = jdbcTemplate;
+        this.analyticsJdbc = analyticsJdbc;
+        this.labReportRepository = labReportRepository;
         this.accessControl = accessControl;
         this.intervalLoader = intervalLoader;
     }
@@ -34,8 +42,21 @@ public class RetestReminderService {
     public AnalyticsDtos.PersonRemindersResponse reminders(AuthenticatedAccount account, Long personId) {
         requireCanViewPerson(account, personId);
 
-        Map<String, RetestReminderComputer.LatestBiomarkerReading> latestByCanonical = loadLatestBiomarkers(personId);
-        LocalDate latestLabReportDate = loadLatestLabReportDate(personId);
+        List<LabReport> eligibleReports = labReportRepository.findActiveByPersonId(personId).stream()
+            .filter(report -> report.getDocumentType() == DocumentType.LAB_REPORT)
+            .filter(report -> report.getExtractionStatus() == ExtractionStatus.COMPLETED
+                || report.getExtractionStatus() == ExtractionStatus.TEXT_ONLY)
+            .filter(report -> report.getReportDate() != null)
+            .toList();
+        Set<Long> eligibleReportIds = new HashSet<>();
+        eligibleReports.forEach(report -> eligibleReportIds.add(report.getId()));
+
+        Map<String, RetestReminderComputer.LatestBiomarkerReading> latestByCanonical =
+            loadLatestBiomarkers(personId, eligibleReportIds);
+        LocalDate latestLabReportDate = eligibleReports.stream()
+            .map(LabReport::getReportDate)
+            .max(LocalDate::compareTo)
+            .orElse(null);
 
         List<AnalyticsDtos.RetestReminder> reminders = RetestReminderComputer.compute(
                 LocalDate.now(),
@@ -48,17 +69,21 @@ public class RetestReminderService {
         return new AnalyticsDtos.PersonRemindersResponse(personId, summary, reminders);
     }
 
-    private Map<String, RetestReminderComputer.LatestBiomarkerReading> loadLatestBiomarkers(Long personId) {
-        List<BiomarkerRow> rows = jdbcTemplate.query("""
-                SELECT bv.canonical_name, bv.numeric_value, bv.reference_range, lr.report_date, lr.id AS report_id
-                FROM biomarker_values bv
-                JOIN lab_reports lr ON lr.id = bv.lab_report_id
-                WHERE lr.person_id = ?
-                  AND lr.deleted_at IS NULL
-                  AND lr.extraction_status IN (?, ?)
-                  AND lr.report_date IS NOT NULL
-                  AND bv.numeric_value IS NOT NULL
-                ORDER BY bv.canonical_name ASC, lr.report_date DESC, lr.uploaded_at DESC
+        private Map<String, RetestReminderComputer.LatestBiomarkerReading> loadLatestBiomarkers(
+                        Long personId,
+                        Set<Long> eligibleReportIds
+        ) {
+                if (eligibleReportIds.isEmpty()) {
+                        return Map.of();
+                }
+
+                List<BiomarkerRow> rows = analyticsJdbc.query("""
+                                SELECT canonical_name, numeric_value, reference_range, report_date, lab_report_id AS report_id
+                FROM fact_biomarker fb
+                                WHERE person_id = ?
+                                    AND report_date IS NOT NULL
+                                    AND numeric_value IS NOT NULL
+                                ORDER BY canonical_name ASC, report_date DESC, uploaded_at DESC
                 """,
                 (rs, rowNum) -> new BiomarkerRow(
                         rs.getString("canonical_name"),
@@ -67,13 +92,14 @@ public class RetestReminderService {
                         rs.getDate("report_date").toLocalDate(),
                         rs.getLong("report_id")
                 ),
-                personId,
-                ExtractionStatus.COMPLETED.name(),
-                ExtractionStatus.TEXT_ONLY.name()
+                personId
         );
 
         Map<String, RetestReminderComputer.LatestBiomarkerReading> latest = new HashMap<>();
         for (BiomarkerRow row : rows) {
+            if (!eligibleReportIds.contains(row.reportId())) {
+                continue;
+            }
             latest.putIfAbsent(
                     row.canonical(),
                     new RetestReminderComputer.LatestBiomarkerReading(
@@ -86,27 +112,6 @@ public class RetestReminderService {
             );
         }
         return latest;
-    }
-
-    private LocalDate loadLatestLabReportDate(Long personId) {
-        List<LocalDate> dates = jdbcTemplate.query("""
-                SELECT report_date
-                FROM lab_reports
-                WHERE person_id = ?
-                  AND deleted_at IS NULL
-                  AND document_type = ?
-                  AND extraction_status IN (?, ?)
-                  AND report_date IS NOT NULL
-                ORDER BY report_date DESC, uploaded_at DESC
-                LIMIT 1
-                """,
-                (rs, rowNum) -> rs.getDate("report_date").toLocalDate(),
-                personId,
-                DocumentType.LAB_REPORT.name(),
-                ExtractionStatus.COMPLETED.name(),
-                ExtractionStatus.TEXT_ONLY.name()
-        );
-        return dates.isEmpty() ? null : dates.getFirst();
     }
 
     private static String buildSummary(List<AnalyticsDtos.RetestReminder> reminders) {

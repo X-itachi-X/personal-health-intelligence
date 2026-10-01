@@ -51,13 +51,14 @@ sh /opt/phi-edge/install-tailscale-funnel.sh
 
 The script prints your public URL and saves it to `/etc/phi/public-url`.
 
-### What testers get
+### Public Links
 
 | Link | Purpose |
 |------|---------|
-| `https://….ts.net/` | Web app |
-| `https://….ts.net/downloads/` | APK download page |
-| `https://….ts.net/api/v1/health` | API |
+| `https://….ts.net/` | Production Web app |
+| `https://….ts.net/downloads/` | Official Android APK release page |
+| `https://….ts.net/downloads/testers/` | Tester preview builds & version history |
+| `https://….ts.net/api/v1/health` | API health check |
 
 ## Alternatives (also free, no domain)
 

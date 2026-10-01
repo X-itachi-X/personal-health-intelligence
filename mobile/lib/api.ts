@@ -1,7 +1,7 @@
 import { Platform } from "react-native";
 import { clearSession, getToken } from "./auth";
 
-const API_BASE = process.env.EXPO_PUBLIC_API_URL ?? "http://localhost:8080";
+const API_BASE = process.env.EXPO_PUBLIC_API_URL ?? "http://192.168.1.7:8080";
 
 type UnauthorizedListener = () => void;
 let unauthorizedListener: UnauthorizedListener | null = null;

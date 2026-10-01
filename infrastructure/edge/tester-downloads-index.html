@@ -3,13 +3,13 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>PHI — Download Official App</title>
+  <title>PHI — Tester Preview Builds</title>
   <style>
     :root {
       --bg: #ebf3f8; --surface: rgba(248, 252, 255, 0.75); --surface-sub: rgba(235, 243, 248, 0.65);
       --border: rgba(168, 191, 212, 0.4); --text: #2c3e50; --muted: #5a718a;
       --blue: #2563eb; --blue-dark: #1d4ed8; --blue-light: #dbeafe;
-      --green: #10b981; --green-light: #d1fae5; --green-dark: #047857;
+      --amber: #f59e0b; --amber-light: #fef3c7; --amber-dark: #b45309;
       --radius: 16px; --shadow: 0 8px 24px rgba(122, 151, 181, 0.16);
     }
     * { box-sizing: border-box; }
@@ -19,17 +19,12 @@
     }
     .page { max-width: 44rem; margin: 0 auto; padding: 2rem 1.25rem 3.5rem; }
     .hero { text-align: center; margin-bottom: 1.5rem; }
-    .logo {
-      display: inline-flex; align-items: center; justify-content: center; width: 3.5rem; height: 3.5rem;
-      border-radius: 14px; background: var(--surface); border: 1px solid var(--border);
-      box-shadow: var(--shadow); font-weight: 800; color: var(--blue-dark); margin-bottom: 0.75rem;
-    }
-    .badge-release {
+    .badge-test {
       display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.25rem 0.75rem; border-radius: 9999px;
-      background: var(--green-light); color: var(--green-dark); font-size: 0.8rem; font-weight: 700;
-      text-transform: uppercase; margin-bottom: 0.75rem; border: 1px solid rgba(16, 185, 129, 0.3);
+      background: var(--amber-light); color: var(--amber-dark); font-size: 0.8rem; font-weight: 700;
+      text-transform: uppercase; margin-bottom: 0.75rem; border: 1px solid rgba(245, 158, 11, 0.3);
     }
-    .badge-release .dot { width: 0.45rem; height: 0.45rem; border-radius: 50%; background: var(--green); }
+    .badge-test .dot { width: 0.45rem; height: 0.45rem; border-radius: 50%; background: var(--amber); }
     h1 { margin: 0 0 0.5rem; font-size: clamp(1.6rem, 4vw, 2rem); font-weight: 800; }
     .tagline { margin: 0; color: var(--muted); font-size: 0.95rem; }
     .glass {
@@ -68,37 +63,36 @@
     ol { margin: 0; padding-left: 1.2rem; color: var(--muted); font-size: 0.92rem; }
     li { margin: 0.4rem 0; }
     li strong { color: var(--text); }
+    code { font-size: 0.85em; padding: 0.15rem 0.35rem; border-radius: 4px; background: var(--blue-light); color: var(--blue-dark); }
     .footer { margin-top: 2rem; text-align: center; color: var(--muted); font-size: 0.88rem; }
     .footer a { color: var(--blue); text-decoration: none; font-weight: 600; }
     .footer a:hover { text-decoration: underline; }
   </style>
 </head>
-
 <body>
   <main class="page">
     <header class="hero">
-      <div class="logo">PHI</div>
-      <div><span class="badge-release"><span class="dot"></span> Official Release</span></div>
+      <div class="badge-test"><span class="dot"></span> Preview Channel (Testers)</div>
       <h1>Personal Health Intelligence</h1>
-      <p class="tagline">Official stable version for Android. Connected to this private health hub.</p>
+      <p class="tagline">Early test builds for QA & verification. Includes latest build & version history.</p>
     </header>
 
     <section class="glass">
       <div class="card-title">
-        <span>Current Stable Release</span>
-        <span id="version-line" class="version-pill">Loading…</span>
+        <span>Latest Test Build</span>
+        <span id="latest-badge" class="version-pill">Loading…</span>
       </div>
       <p id="build-meta" class="meta" hidden></p>
       <div id="notes" class="notes-box" hidden></div>
       <a class="btn" id="apk-link" href="phi-latest.apk" download="phi-latest.apk" type="application/vnd.android.package-archive">
         <svg viewBox="0 0 24 24"><path d="M17.6 11.48v3.84c0 .44-.05.84-.15 1.2a4.3 4.3 0 0 1-4.25 3.5 4.17 4.17 0 0 1-4.2-3.5 6.52 6.52 0 0 1-.08-1.2v-3.84H4.8a.8.8 0 0 1-.57-.24.8.8 0 0 1 0-1.13L11.63 2.3a.8.8 0 0 1 1.13 0l7.4 7.4a.8.8 0 0 1 0 1.13.8.8 0 0 1-.56.24h-2zM12 15.2a2.4 2.4 0 1 0 0 4.8 2.4 2.4 0 0 0 0-4.8z"/></svg>
-        Download Android APK
+        Download Latest Tester APK
       </a>
     </section>
 
     <section class="glass">
       <div class="card-title">
-        <span>Previous Versions</span>
+        <span>Previous Test Builds</span>
         <span id="history-count" style="font-size:0.85rem; color:var(--muted); font-weight:normal;"></span>
       </div>
       <div id="history-container" class="history-list">
@@ -107,16 +101,16 @@
     </section>
 
     <section class="glass">
-      <div class="card-title">Install on your phone</div>
+      <div class="card-title">Installation Instructions</div>
       <ol>
-        <li>Download the APK using the button above.</li>
-        <li>Tap <strong>Open</strong> once downloaded. Allow <strong>Install unknown apps</strong> if prompted.</li>
-        <li>Open PHI and sign in with your family health account.</li>
+        <li>Download the APK onto your Android device.</li>
+        <li>Tap <strong>Open</strong> and allow <strong>Install unknown apps</strong> if prompted.</li>
+        <li>Updates: Launching the app automatically checks <code>/downloads/testers/android.json</code>.</li>
       </ol>
     </section>
 
     <footer class="footer">
-      <p>Prefer web browser? <a href="/">Open Web App</a> &bull; <a href="/downloads/testers/">Tester Preview Portal</a></p>
+      <p>Official release? <a href="/downloads/">Go to User Downloads</a> &bull; <a href="/">Open Web App</a></p>
       <small>Server Status: <a href="/api/v1/health">/api/v1/health</a></small>
     </footer>
   </main>
@@ -125,23 +119,23 @@
     fetch("android.json?t=" + Date.now())
       .then(r => r.json())
       .then(m => {
-        const pill = document.getElementById("version-line");
-        pill.textContent = "v" + m.version + " (b" + m.versionCode + ")";
+        const badge = document.getElementById("latest-badge");
+        badge.textContent = "v" + m.version + " (b" + m.versionCode + ")";
         const meta = document.getElementById("build-meta");
-        meta.textContent = "Released " + new Date(m.publishedAt).toLocaleString();
+        meta.textContent = "Published: " + new Date(m.publishedAt).toLocaleString();
         meta.hidden = false;
         if (m.releaseNotes) {
           const notes = document.getElementById("notes");
-          notes.textContent = m.releaseNotes;
+          notes.textContent = "Changes: " + m.releaseNotes;
           notes.hidden = false;
         }
         const histContainer = document.getElementById("history-container");
         const countSpan = document.getElementById("history-count");
         const history = Array.isArray(m.history) ? m.history : [];
         if (history.length === 0) {
-          histContainer.innerHTML = '<p style="color:var(--muted); font-size:0.9rem; margin:0.3rem 0;">No previous versions archived yet.</p>';
+          histContainer.innerHTML = '<p style="color:var(--muted); font-size:0.9rem; margin:0.3rem 0;">No previous builds archived yet.</p>';
         } else {
-          countSpan.textContent = history.length + " previous version" + (history.length > 1 ? "s" : "");
+          countSpan.textContent = history.length + " archived build" + (history.length > 1 ? "s" : "");
           histContainer.innerHTML = "";
           history.forEach(item => {
             const row = document.createElement("div");
@@ -153,14 +147,14 @@
                 <div class="history-title">v${item.version} (Build ${item.versionCode})</div>
                 <div class="history-meta">${dateStr}${notesStr}</div>
               </div>
-              <a class="btn btn-sm" href="${item.apkUrl}" download>Download</a>
+              <a class="btn btn-sm" href="${item.apkUrl}" download>Download APK</a>
             `;
             histContainer.appendChild(row);
           });
         }
       })
       .catch(() => {
-        document.getElementById("version-line").textContent = "Official Release";
+        document.getElementById("latest-badge").textContent = "Test Build";
         document.getElementById("history-container").innerHTML = '<p style="color:var(--muted); font-size:0.9rem;">Could not load history.</p>';
       });
   </script>

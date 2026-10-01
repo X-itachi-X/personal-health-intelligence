@@ -88,7 +88,11 @@ public record PhiProperties(
     public record Google(String clientId) {
     }
 
-    public record Platform(String adminEmails) {
+    public record Platform(String adminEmails, Ai ai) {
+        public Platform(String adminEmails) {
+            this(adminEmails, null);
+        }
+
         public Set<String> adminEmailSet() {
             if (adminEmails == null || adminEmails.isBlank()) {
                 return Set.of();
@@ -98,6 +102,24 @@ public record PhiProperties(
                     .filter(email -> !email.isEmpty())
                     .map(email -> email.toLowerCase(Locale.ROOT))
                     .collect(Collectors.toSet());
+        }
+
+        /**
+         * Provider-agnostic AI gateway (e.g. OmniRoute). When {@code enabled} and
+         * {@code baseUrl}/{@code apiKey} are set, all AI requests go to this gateway
+         * instead of directly to Anthropic.
+         */
+        public record Ai(
+                String baseUrl,
+                String apiKey,
+                String model,
+                boolean enabled
+        ) {
+            public boolean isConfigured() {
+                return enabled
+                        && baseUrl != null && !baseUrl.isBlank()
+                        && apiKey != null && !apiKey.isBlank();
+            }
         }
     }
 }

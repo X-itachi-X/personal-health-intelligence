@@ -1,5 +1,5 @@
-import { BlurView } from "expo-blur";
-import { ReactNode } from "react";
+import { BlurTargetView, BlurView } from "expo-blur";
+import { ReactNode, useRef } from "react";
 import { Platform, StyleSheet, View, ViewStyle } from "react-native";
 import { useTheme } from "../../lib/ThemeContext";
 import { radii } from "../../lib/theme";
@@ -33,6 +33,7 @@ export function MatteSurface({
   elevated = false,
 }: MatteSurfaceProps) {
   const { colors, glass, elevation } = useTheme();
+  const blurTargetRef = useRef<View>(null);
 
   const fill =
     variant === "muted"
@@ -65,16 +66,20 @@ export function MatteSurface({
     );
   }
 
+  const isAndroid = Platform.OS === "android";
+
   return (
     <View style={shell}>
       <BlurView
         intensity={glass.blurIntensity}
         tint={glass.tint}
-        experimentalBlurMethod={Platform.OS === "android" ? "dimezisBlurView" : undefined}
+        blurMethod={isAndroid ? "dimezisBlurView" : undefined}
+        blurTarget={isAndroid ? blurTargetRef : undefined}
         style={[styles.blur, { borderRadius }]}
-      >
+      />
+      <BlurTargetView ref={blurTargetRef} style={styles.blurTarget}>
         <View style={inner}>{children}</View>
-      </BlurView>
+      </BlurTargetView>
     </View>
   );
 }
@@ -85,6 +90,14 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   blur: {
+    overflow: "hidden",
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+  },
+  blurTarget: {
     overflow: "hidden",
   },
   inner: {

@@ -41,13 +41,13 @@ if [ -n "${EXPO_TOKEN:-}" ]; then
   npx eas-cli build --platform android --profile preview --non-interactive --wait
   APK_OUT=$(mktemp -d)/phi-release.apk
   npx eas-cli build:download --platform android --latest --output "$APK_OUT"
-  RELEASE_NOTES="${RELEASE_NOTES:-}" "$ROOT/infrastructure/ci/publish-apk-to-edge.sh" "$APK_OUT"
+  RELEASE_CHANNEL="${RELEASE_CHANNEL:-testers}" RELEASE_NOTES="${RELEASE_NOTES:-}" "$ROOT/infrastructure/ci/publish-apk-to-edge.sh" "$APK_OUT"
   exit 0
 fi
 
 if [ -d "${ANDROID_HOME:-}" ] || [ -d "${ANDROID_SDK_ROOT:-}" ] || [ -d "$HOME/Android/Sdk" ]; then
   echo "==> Local Gradle APK (Android SDK detected)"
-  USE_LOCAL_BUILD=1 RELEASE_NOTES="${RELEASE_NOTES:-}" "$ROOT/infrastructure/ci/build-android-apk.sh"
+  USE_LOCAL_BUILD=1 RELEASE_CHANNEL="${RELEASE_CHANNEL:-testers}" RELEASE_NOTES="${RELEASE_NOTES:-}" "$ROOT/infrastructure/ci/build-android-apk.sh"
   exit 0
 fi
 

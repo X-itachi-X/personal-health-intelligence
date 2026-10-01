@@ -1,7 +1,23 @@
-# CI/CD — Option B (JAR-only production)
+# CI/CD & Multi-Channel Release Pipeline
 
 **Production edge server does not keep application source code.**  
-Only the built JAR, data directories, encrypted secrets, and small ops scripts.
+Only the built JAR, data directories, encrypted secrets, and static release portal assets.
+
+## Dual-Track Release Pipeline & Edge Portals
+
+We maintain separate tracks for preview testing (`test` branch) and official releases (`main` branch) with full version history archiving.
+
+| Channel | Branch / Trigger | Edge Portal | Direct APK | Manifest |
+|---------|------------------|-------------|------------|----------|
+| **Testers** | `test` branch | `https://<DOMAIN>/downloads/testers/` | `/downloads/testers/phi-latest.apk` | `/downloads/testers/android.json` |
+| **Production** | `main` branch | `https://<DOMAIN>/downloads/` | `/downloads/phi-latest.apk` | `/downloads/android.json` |
+
+### Version History & Archiving
+- Both channels archive versioned APKs under `archive/` (e.g. `/downloads/testers/archive/phi-test-v0.1.0-b42.apk` and `/downloads/archive/phi-v0.1.0-b42.apk`).
+- Manifests (`android.json`) maintain a structured `history` array with past versions, build numbers, timestamps, changelogs, and direct archive download links.
+- Download web portals dynamically load and display current builds and the full version history table.
+
+---
 
 ## What lives on production (`edge`)
 
@@ -32,15 +48,13 @@ So: you are **not** building a PDF archive on prod by default — you keep **str
 - `.env` plain text
 - Mobile app source
 
-## Release pipeline (backend + web + APK)
+## Workflows
 
-**Push to `main`** → GitHub Actions runs tests, then deploys everything to edge.
-
-| Workflow | Trigger | What it does |
-|----------|---------|--------------|
-| **`release.yml`** | Push to `main`, manual | Test → deploy JAR + web + APK |
-| `edge-build.yml` | Pull requests | Tests only |
-| `edge-deploy.yml` | Manual | JAR-only emergency deploy |
+| Workflow | Trigger | Artifacts Uploaded | Deployment Target |
+|----------|---------|--------------------|-------------------|
+| **`test-pipeline.yml`** | `push` / `PR` to `test`, manual | Backend JAR, Web dist, Tester APK | Tester portal (`/downloads/testers/`) |
+| **`release.yml`** | `push` to `main`, manual | Production APK | Production backend + web + `/downloads/` |
+| **`edge-build.yml`** | PR to `main` or `test` | None (Test/lint only) | None |
 
 ### One-time GitHub setup
 
@@ -67,28 +81,33 @@ So: you are **not** building a PDF archive on prod by default — you keep **str
    eas credentials   # Android keystore for preview profile
    ```
 
-5. Push to `main` — workflow builds APK in EAS cloud, downloads it on the runner, uploads to edge.
+5. Push to `test` → builds and deploys to tester portal; push to `main` → builds and deploys official release.
 
 ### Manual release (same as CI)
 
 ```bash
-PUBLIC_URL=https://edge-server.tail8a02ee.ts.net \
-EXPO_TOKEN=your_token \
-./infrastructure/ci/ci-release.sh
-```
+# 1. Full production release:
+PUBLIC_URL=https://edge-server.tail8a02ee.ts.net EXPO_TOKEN=your_token ./infrastructure/ci/ci-release.sh
 
-Backend + web only (skip APK): `SKIP_APK=1 ./infrastructure/ci/publish-testers-to-edge.sh`
+# 2. Tester preview release:
+PUBLIC_URL=https://edge-server.tail8a02ee.ts.net EXPO_TOKEN=your_token ./infrastructure/ci/ci-test-release.sh
+
+# 3. Backend + web only (skip APK):
+SKIP_APK=1 ./infrastructure/ci/publish-users-to-edge.sh
+```
 
 ### Scripts
 
 | Script | Purpose |
 |--------|---------|
-| `ci-release.sh` | Full release entrypoint (CI + manual) |
-| `publish-testers-to-edge.sh` | Backend + web + APK → edge |
+| `ci-release.sh` | Full production release entrypoint (Backend + Web + APK) |
+| `ci-test-release.sh` | Full tester release entrypoint |
+| `publish-users-to-edge.sh` | Backend + web + official APK → `/downloads/` |
+| `publish-testers-to-edge.sh` | Preview APK → `/downloads/testers/` |
 | `publish-to-edge.sh` | Backend JAR only |
 | `publish-web-to-edge.sh` | Expo web export |
 | `build-android-apk-ci.sh` | EAS or local SDK → APK → edge |
-| `publish-apk-to-edge.sh` | Upload APK + `android.json` manifest |
+| `publish-apk-to-edge.sh` | Upload APK, version history archive, and `android.json` manifest |
 
 Cloud GitHub runners **cannot** SSH to your LAN edge box — the **self-hosted runner** on your PC performs deploy.
 

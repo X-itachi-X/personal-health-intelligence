@@ -2,10 +2,22 @@
 # Routes: API → Spring Boot, /downloads → APK, everything else → web static export.
 
 :80 {
-	encode gzip
+	# Do not gzip APKs. Android Chrome's download manager saves the compressed
+	# bytes, then "Open" fails with "There was a problem parsing the package".
+	@compressible {
+		not path_regexp (?i)\.apk$
+	}
+	encode @compressible gzip
 
 	handle /downloads/* {
 		root * /var/phi/public
+		@apk path_regexp (?i)\.apk$
+		header @apk {
+			Content-Type application/vnd.android.package-archive
+			Content-Disposition "attachment"
+			Cache-Control "no-transform"
+			X-Content-Type-Options nosniff
+		}
 		file_server
 	}
 

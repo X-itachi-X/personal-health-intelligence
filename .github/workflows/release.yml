@@ -1,6 +1,7 @@
-name: Release to edge
+name: Production Release
 
-# Push to main → test → deploy backend + web + APK to edge server.
+# Push to main → verify → deploy backend + web + official APK to edge server.
+# Edge user download portal: ${PUBLIC_URL}/downloads/
 #
 # One-time setup (see infrastructure/ci/README.md):
 #   1. Self-hosted runner on your LAN PC (labels: self-hosted, edge-lan)
@@ -14,12 +15,12 @@ on:
   workflow_dispatch:
 
 concurrency:
-  group: edge-release
+  group: prod-release
   cancel-in-progress: false
 
 jobs:
   verify:
-    name: Test
+    name: Verify & Test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -44,8 +45,8 @@ jobs:
         working-directory: mobile
         run: npm ci
 
-  deploy:
-    name: Deploy backend + web + APK
+  deploy-production:
+    name: Deploy Production Release
     needs: verify
     runs-on: [self-hosted, edge-lan]
     if: github.event_name == 'workflow_dispatch' || github.ref == 'refs/heads/main'
@@ -61,10 +62,11 @@ jobs:
         with:
           node-version: "22"
 
-      - name: Release to edge
+      - name: Release Production to Edge
         env:
           CI: "true"
           BUILD_APK: "1"
+          RELEASE_CHANNEL: "users"
           PUBLIC_URL: ${{ secrets.PUBLIC_URL }}
           EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
           EDGE_HOST: ${{ secrets.EDGE_HOST }}
@@ -74,9 +76,18 @@ jobs:
           chmod +x infrastructure/ci/*.sh
           ./infrastructure/ci/ci-release.sh
 
-      - name: Smoke check
+      - name: Upload Production APK Artifact
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mobile-prod-apk-${{ github.run_number }}
+          path: mobile/**/*.apk
+          retention-days: 30
+
+      - name: Production Smoke Check
         env:
           PUBLIC_URL: ${{ secrets.PUBLIC_URL }}
         run: |
           curl -fsS "${PUBLIC_URL}/api/v1/health" | grep -q '"status":"ok"'
           curl -fsS "${PUBLIC_URL}/downloads/android.json" | grep -q versionCode
+          curl -fsS "${PUBLIC_URL}/downloads/" | grep -q "Official Release"

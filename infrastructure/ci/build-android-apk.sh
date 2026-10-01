@@ -32,7 +32,7 @@ if [ "${USE_LOCAL_BUILD:-}" = "1" ]; then
   APK=$(find app/build/outputs/apk/release -name '*.apk' | head -1)
   echo "Built: $APK"
   cd "$ROOT"
-  BUMP_VERSION=1 RELEASE_NOTES="${RELEASE_NOTES:-}" "$ROOT/infrastructure/ci/publish-apk-to-edge.sh" "$APK"
+  BUMP_VERSION=1 RELEASE_CHANNEL="${RELEASE_CHANNEL:-testers}" RELEASE_NOTES="${RELEASE_NOTES:-}" "$ROOT/infrastructure/ci/publish-apk-to-edge.sh" "$APK"
   exit 0
 fi
 

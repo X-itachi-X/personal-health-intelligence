@@ -12,7 +12,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @Configuration
 public class WebConfig {
 
-    @Value("${phi.cors.allowed-origins:http://localhost:8081,http://127.0.0.1:8081}")
+    @Value("${phi.cors.allowed-origins:http://localhost:8081,http://127.0.0.1:8081,http://192.168.1.7:8081,exp://192.168.1.7:8081}")
     private String allowedOrigins;
 
     @Bean

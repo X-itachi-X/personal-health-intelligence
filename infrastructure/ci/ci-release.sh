@@ -1,5 +1,5 @@
 #!/bin/sh
-# Full edge release: backend + web + APK. Used by GitHub Actions and manual deploys.
+# Full edge production release: backend + web + official APK. Used by GitHub Actions and manual deploys.
 #
 # Usage (from repo root):
 #   PUBLIC_URL=https://edge-server.xxx.ts.net EXPO_TOKEN=xxx ./infrastructure/ci/ci-release.sh
@@ -17,4 +17,4 @@ if [ -z "${RELEASE_NOTES:-}" ]; then
 fi
 
 export BUILD_APK=1
-exec "$ROOT/infrastructure/ci/publish-testers-to-edge.sh"
+exec "$ROOT/infrastructure/ci/publish-users-to-edge.sh"
