@@ -1,22 +1,15 @@
-name: Production Release
-
-# Push to main → verify → deploy backend + web + official APK to edge server.
-# Edge user download portal: ${PUBLIC_URL}/downloads/
-#
-# One-time setup (see infrastructure/ci/README.md):
-#   1. Self-hosted runner on your LAN PC (labels: self-hosted, edge-lan)
-#   2. Runner: JDK 21, Node 22, ssh access to edge host
-#   3. GitHub secrets: EXPO_TOKEN, PUBLIC_URL
-#   4. Optional secret: EDGE_HOST (default: edge)
+name: CI/CD Pipeline
 
 on:
   push:
-    branches: [main]
+    branches: [main, test]
+  pull_request:
+    branches: [main, test]
   workflow_dispatch:
 
 concurrency:
-  group: prod-release
-  cancel-in-progress: false
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   verify:
@@ -35,6 +28,10 @@ jobs:
         working-directory: backend
         run: ./gradlew test
 
+      - name: Checkstyle
+        working-directory: backend
+        run: ./gradlew checkstyleMain checkstyleTest
+
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
@@ -45,11 +42,19 @@ jobs:
         working-directory: mobile
         run: npm ci
 
-  deploy-production:
-    name: Deploy Production Release
+      - name: TypeScript check
+        working-directory: mobile
+        run: npx tsc --noEmit
+
+      - name: ESLint
+        working-directory: mobile
+        run: npx eslint .
+
+  deploy:
+    name: Deploy
     needs: verify
     runs-on: [self-hosted, edge-lan]
-    if: github.event_name == 'workflow_dispatch' || github.ref == 'refs/heads/main'
+    if: github.event_name == 'workflow_dispatch' || github.ref == 'refs/heads/main' || github.ref == 'refs/heads/test'
     steps:
       - uses: actions/checkout@v4
 
@@ -62,11 +67,11 @@ jobs:
         with:
           node-version: "22"
 
-      - name: Release Production to Edge
+      - name: Deploy to Edge
         env:
           CI: "true"
           BUILD_APK: "1"
-          RELEASE_CHANNEL: "users"
+          RELEASE_CHANNEL: ${{ github.ref == 'refs/heads/main' && 'users' || 'testers' }}
           PUBLIC_URL: ${{ secrets.PUBLIC_URL }}
           EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
           EDGE_HOST: ${{ secrets.EDGE_HOST }}
@@ -74,20 +79,45 @@ jobs:
           GITHUB_RUN_NUMBER: ${{ github.run_number }}
         run: |
           chmod +x infrastructure/ci/*.sh
-          ./infrastructure/ci/ci-release.sh
+          if [ "${{ github.ref == 'refs/heads/main' }}" = "true" ]; then
+            ./infrastructure/ci/ci-release.sh
+          else
+            ./infrastructure/ci/ci-test-release.sh
+          fi
 
-      - name: Upload Production APK Artifact
+      - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: mobile-prod-apk-${{ github.run_number }}
+          name: mobile-${{ github.ref == 'refs/heads/main' && 'prod' || 'tester' }}-apk-${{ github.run_number }}
           path: mobile/**/*.apk
-          retention-days: 30
+          retention-days: ${{ github.ref == 'refs/heads/main' && 30 || 14 }}
 
-      - name: Production Smoke Check
+      - name: Smoke Check
         env:
           PUBLIC_URL: ${{ secrets.PUBLIC_URL }}
         run: |
-          curl -fsS "${PUBLIC_URL}/api/v1/health" | grep -q '"status":"ok"'
-          curl -fsS "${PUBLIC_URL}/downloads/android.json" | grep -q versionCode
-          curl -fsS "${PUBLIC_URL}/downloads/" | grep -q "Official Release"
+          if [ "${{ github.ref == 'refs/heads/main' }}" = "true" ]; then
+            curl -fsS "${PUBLIC_URL}/api/v1/health" | grep -q '"status":"ok"'
+            curl -fsS "${PUBLIC_URL}/downloads/android.json" | grep -q versionCode
+            curl -fsS "${PUBLIC_URL}/downloads/" | grep -q "Official Release"
+          else
+            curl -fsS "${PUBLIC_URL}/downloads/testers/android.json" | grep -q versionCode
+            curl -fsS "${PUBLIC_URL}/downloads/testers/" | grep -q "Preview Channel"
+          fi
+
+      - name: Upload Backend JAR Artifact
+        uses: actions/upload-artifact@v4
+        if: github.ref == 'refs/heads/test'
+        with:
+          name: backend-test-jar-${{ github.run_number }}
+          path: backend/build/libs/backend-*.jar
+          retention-days: 14
+
+      - name: Upload Mobile Web Artifact
+        uses: actions/upload-artifact@v4
+        if: github.ref == 'refs/heads/test'
+        with:
+          name: mobile-web-dist-${{ github.run_number }}
+          path: mobile/dist
+          retention-days: 14
